@@ -13,22 +13,6 @@ app.use(function(req, res, next) {
     next();
 });
 
- // Database Connection
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'Shantanu',
-  database : 'movie'
-});
-connection.connect(function(err){
-if(!err) {
-    console.log("Database is connected ... nn");
-} else {
-    console.log("Error connecting database ... nn" + err.message);
-}
-});
-
 var router = express.Router();
 // test route
 router.get('/', function(req, res) {
@@ -36,6 +20,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/register',login.register);
+router.post('/login',login.login);
 app.use('/api', router);
 
 module.exports = app;
