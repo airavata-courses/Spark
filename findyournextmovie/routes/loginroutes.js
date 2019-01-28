@@ -65,8 +65,7 @@ exports.login = function(req,res){
   }else{
     // console.log('The solution is: ', results);
     if(results.length >0){
-      console.log(results[0].PASSWORD);
-      if(bcrypt.compareSync(password, results[0].PASSWORD)) {
+      if(bcrypt.compareSync(password, results[0].password)) {
         res.send({
           "code":200,
           "success":"login sucessfull"
