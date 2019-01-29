@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import muiTheme from './Theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import axios from 'axios';
 
 const styles = theme => ({
   main: {
@@ -49,6 +50,42 @@ const styles = theme => ({
 
 
 class LogIn extends Component{
+  constructor(props) {
+      super(props);
+      this.state = {
+        email: "",
+        password: ""
+      };
+      this.handleInputChange = this.handleInputChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleInputChange(event) {
+      console.log('input changing');
+    const target = event.target;
+    const inputName = target.name;
+    const inputValue = target.value;
+
+    this.setState({
+      [inputName]: inputValue
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log('state :: ' + JSON.stringify(this.state));
+    const loginRequest = Object.assign({}, this.state);
+    console.log('signUpRequest' + JSON.stringify(loginRequest));
+
+    axios.post('http://localhost:8080/api/login',  loginRequest )
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        }).catch(error => {
+          console.log('error!!');
+        });
+    }
+
   render(){
     const { classes } = this.props;
     return(
@@ -63,14 +100,14 @@ class LogIn extends Component{
           <Typography component="h1" variant="h5">
             Log in
           </Typography>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus />
+              <Input id="email" name="email" autoComplete="email" onChange={this.handleInputChange} autoFocus />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" />
+              <Input name="password" type="password" id="password" onChange={this.handleInputChange} autoComplete="current-password" />
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

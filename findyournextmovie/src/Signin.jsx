@@ -65,7 +65,7 @@ class SignIn extends Component{
         password: ""
       };
       this.handleInputChange = this.handleInputChange.bind(this);
-      //this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
   handleInputChange(event) {
     console.log('input changing');
@@ -80,13 +80,20 @@ class SignIn extends Component{
 
 handleSubmit(event) {
   event.preventDefault();
+  console.log('state :: ' + JSON.stringify(this.state));
   const signUpRequest = Object.assign({}, this.state);
+  signUpRequest['dob'] = '01-01-1992';
+  signUpRequest['gender'] = 'F';
+  signUpRequest['country'] = 'India'
+  console.log('signUpRequest' + JSON.stringify(signUpRequest));
 
-  axios.post(`https://jsonplaceholder.typicode.com/users`, { signUpRequest })
+  axios.post('http://localhost:8080/api/register',  signUpRequest )
       .then(res => {
         console.log(res);
         console.log(res.data);
-      })
+      }).catch(error => {
+        console.log('error!!');
+      });
   }
 
 
@@ -104,7 +111,7 @@ handleSubmit(event) {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={this.handleSubmit}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="text">First Name</InputLabel>
             <Input id="first_name" name="first_name" autoComplete="first name" onChange={this.handleInputChange} autoFocus />
