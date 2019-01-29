@@ -15,6 +15,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import muiTheme from './Theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import TextField from '@material-ui/core/TextField';
+import axios from 'axios';
 
 const styles = theme => ({
   main: {
@@ -55,6 +56,40 @@ const styles = theme => ({
 
 
 class SignIn extends Component{
+  constructor(props) {
+      super(props);
+      this.state = {
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: ""
+      };
+      this.handleInputChange = this.handleInputChange.bind(this);
+      //this.handleSubmit = this.handleSubmit.bind(this);
+    }
+  handleInputChange(event) {
+    console.log('input changing');
+  const target = event.target;
+  const inputName = target.name;
+  const inputValue = target.value;
+
+  this.setState({
+    [inputName]: inputValue
+  });
+}
+
+handleSubmit(event) {
+  event.preventDefault();
+  const signUpRequest = Object.assign({}, this.state);
+
+  axios.post(`https://jsonplaceholder.typicode.com/users`, { signUpRequest })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+  }
+
+
   render(){
     const { classes } = this.props;
     return(
@@ -72,19 +107,19 @@ class SignIn extends Component{
           <form className={classes.form}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="text">First Name</InputLabel>
-            <Input id="fname" name="fname" autoComplete="first name" autoFocus />
+            <Input id="first_name" name="first_name" autoComplete="first name" onChange={this.handleInputChange} autoFocus />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="text">Last Name</InputLabel>
-            <Input id="lname" name="lname" autoComplete="first name" autoFocus />
+            <Input id="last_name" name="last_name" autoComplete="last name" onChange={this.handleInputChange} autoFocus />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus />
+            <Input id="email" name="email" autoComplete="email" onChange={this.handleInputChange} autoFocus />
           </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" />
+              <Input name="password" type="password" id="password" onChange={this.handleInputChange} autoComplete="current-password" />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Confirm Password</InputLabel>
@@ -93,7 +128,7 @@ class SignIn extends Component{
             <FormControl margin="normal" fullWidth>
               <Input name="dob" type="date" id="dob" autoComplete="dd-mm-yyyy" />
             </FormControl>
-          
+
             <Button
               type="submit"
               fullWidth
