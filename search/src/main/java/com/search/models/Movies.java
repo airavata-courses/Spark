@@ -6,6 +6,8 @@ public class Movies {
     private String title;
     private int vote_count;
     private String original_language;
+    private String release_date;
+    private float vote_average;
 
     public void setMovie_id(int movie_id) {
         this.movie_id = movie_id;
@@ -27,6 +29,14 @@ public class Movies {
         this.original_language = original_language;
     }
 
+    public void setRelease_date(String release_date) {
+        this.release_date = release_date;
+    }
+
+    public void setVote_average(float vote_average) {
+        this.vote_average = vote_average;
+    }
+
     public int getMovie_id() {
         return movie_id;
     }
@@ -45,5 +55,13 @@ public class Movies {
 
     public String getOriginal_language() {
         return original_language;
+    }
+
+    public String getRelease_date() {
+        return release_date;
+    }
+
+    public float getVote_average() {
+        return vote_average;
     }
 }

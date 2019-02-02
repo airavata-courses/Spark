@@ -14,6 +14,8 @@ public class MovieListMapper {
         movies.setPoster_path(movieResults.getPoster_path());
         movies.setOriginal_language(movieResults.getOriginal_language());
         movies.setVote_count(movieResults.getVote_count());
+        movies.setRelease_date(movieResults.getRelease_date());
+        movies.setVote_average(movieResults.getVote_average());
         return movies;
     }
 }
