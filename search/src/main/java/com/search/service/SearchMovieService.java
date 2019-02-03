@@ -34,6 +34,7 @@ public class SearchMovieService {
         RestTemplate restTemplate = new RestTemplate();
         try {
             SearchMovieList result = restTemplate.getForObject(uri, SearchMovieList.class);
+
             List<Movies> movies = result.getResults().stream().map(movieListMapper::toMovie).collect(Collectors.toList());
             return new MovieList(movies);
         }  catch (Exception ex) {
