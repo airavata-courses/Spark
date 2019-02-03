@@ -2,6 +2,7 @@
 from sqlalchemy import Column,Integer,Float,Sequence, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
+import json
 
 Base = declarative_base()
 
