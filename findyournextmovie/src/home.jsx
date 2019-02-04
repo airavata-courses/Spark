@@ -15,8 +15,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Footer from "./footer";
 import SearchBar from 'material-ui-search-bar'
 import axios from 'axios';
-import AutoFitImage from 'react-image-autofit-frame';
 import {Tabs, Tab} from '@material-ui/core/'
+// import {Router, Route, IndexRoute} from 'react-router';
+import { Link } from "react-router-dom";
+import MovieDetails from './MovieDetails';
 
 const styles = theme => ({
   icon: {
@@ -64,8 +66,6 @@ const styles = theme => ({
   },
 });
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-
 class Jumbotron extends Component{
   constructor(props) {
       super(props);
@@ -76,12 +76,10 @@ class Jumbotron extends Component{
       };
       this.requestSearch = this.requestSearch.bind(this);
     }
+
   componentWillMount() {
     axios.get('http://localhost:8080/search/toprated' )
         .then(res => {
-          console.log('res :: ' + JSON.stringify(res.data.movies));
-          console.log('path :: ' + res.data.movies.poster_path);
-
           this.setState({
             movieDetails: res.data.movies,
             imgPath: "https://image.tmdb.org/t/p/w500/" + res.data.movies.poster_path,
@@ -91,11 +89,9 @@ class Jumbotron extends Component{
         });
     }
 
-    requestSearch(event){
-      console.log("handleChange", event);
+  requestSearch(event){
       axios.get('http://localhost:8080/search/keyword?keyword=' +  event)
           .then(res => {
-            console.log(JSON.stringify(res));
             this.setState({
               movieDetails: res.data.movies,
             });
@@ -104,9 +100,11 @@ class Jumbotron extends Component{
           });
     }
 
+
   render(){
     const { classes } = this.props;
     return(
+
       <React.Fragment>
         <CssBaseline />
 
@@ -124,8 +122,6 @@ class Jumbotron extends Component{
               {this.state.movieDetails.map(card => (
                 <Grid item key={card} sm={6} md={4} lg={3}>
                   <Card className={classes.card} >
-
-
                   <CardMedia
                   component="img"
                     className={classes.media}
@@ -139,17 +135,16 @@ class Jumbotron extends Component{
 
                     </CardContent>
                     <CardActions>
-                      <Button size="small" color="primary">
-                        View
-                      </Button>
+                      <Link to= {"/movieDetails/" + card["movie_id"]}>Open</Link>
                       <Typography gutterBottom variant="h10" component="h5">
                         {card["vote_count"]}
                       </Typography>
 
                     </CardActions>
                   </Card>
-                </Grid>
+                  </Grid>
               ))}
+
             </Grid>
           </div>
         </main>

@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import MenuAppBar from './MenuAppBar';
-// import LogIn from "./Login";
-// import SignIn from "./Signin";
-import Jumbotron from "./home"
+import MovieDetails from './MovieDetails';
+import Jumbotron from "./home";
+import { BrowserRouter } from 'react-router-dom';
+import Route from 'react-router-dom/Route';
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <MenuAppBar></MenuAppBar>
-        <Jumbotron></Jumbotron>
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <MenuAppBar></MenuAppBar>
+          <Switch>
+            <Route exact path = "/" component={Jumbotron}></Route>
+            <Route exact path = "/movieDetails/:movie_id" component={MovieDetails}></Route>
+          </Switch>
+        </div>
+      </BrowserRouter>
+
     );
   }
 }
