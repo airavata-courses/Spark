@@ -10,4 +10,7 @@ public class UserMovieRatingId implements Serializable {
         this.userId = userId;
         this.movieId = movieId;
     }
+
+    public UserMovieRatingId() {
+    }
 }
