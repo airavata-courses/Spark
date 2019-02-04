@@ -19,6 +19,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarRating from './StarRating';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -59,6 +60,7 @@ class MovieDetails extends Component {
   constructor(props) {
       super(props);
       this.state = {
+        movie_id: '',
         movieDetails: [],
         movieCast : [],
         movieGenre : [],
@@ -66,13 +68,13 @@ class MovieDetails extends Component {
     }
 
   componentWillMount() {
-    console.log('props json ' + JSON.stringify(this.props.match.params.movie_id));
     axios.get('http://localhost:8080/movie/details?movieId=' +  this.props.match.params.movie_id)
         .then(res => {
           this.setState({
             movieDetails: res.data,
             movieCast: res.data.cast,
             movieGenre: res.data.genres,
+            movie_id: this.props.match.params.movie_id,
           });
         }).catch(error => {
           console.log('error!!');
@@ -121,7 +123,8 @@ class MovieDetails extends Component {
            </Typography>
 
            <Typography gutterBottom variant="h10" component="h5">
-           <StarRating/>
+           <StarRating movie_id = {this.props.match.params.movie_id}
+           movie_name = {this.state.movieDetails['title']}/>
            Vote Average: {this.state.movieDetails['vote_average']}
            </Typography>
 
