@@ -86,6 +86,14 @@ public class MovieDetails {
         return crew;
     }
 
+    public boolean isSeen() {
+        return isSeen;
+    }
+
+    public void setSeen(boolean seen) {
+        isSeen = seen;
+    }
+
     public void setAdult(boolean adult) {
         this.adult = adult;
     }
