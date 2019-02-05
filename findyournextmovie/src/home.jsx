@@ -12,13 +12,12 @@ import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import Footer from "./footer";
 import SearchBar from 'material-ui-search-bar'
 import axios from 'axios';
 import {Tabs, Tab} from '@material-ui/core/'
-// import {Router, Route, IndexRoute} from 'react-router';
 import { Link } from "react-router-dom";
 import MovieDetails from './MovieDetails';
+import NonEditableStarRating from './NonEditableStarRating';
 
 const styles = theme => ({
   icon: {
@@ -60,10 +59,6 @@ const styles = theme => ({
   cardContent: {
     flexGrow: 1,
   },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 6,
-  },
 });
 
 class Jumbotron extends Component{
@@ -73,9 +68,11 @@ class Jumbotron extends Component{
         movieDetails: [],
         movieName: "",
         imgPath: "",
+        searchText: "",
       };
       this.requestSearch = this.requestSearch.bind(this);
-    }
+      this.onClick = this.requestSearch.bind(this);
+  }
 
   componentWillMount() {
     axios.get('http://localhost:8080/search/toprated' )
@@ -89,8 +86,8 @@ class Jumbotron extends Component{
         });
     }
 
-  requestSearch(event){
-      axios.get('http://localhost:8080/search/keyword?keyword=' +  event)
+  requestSearch(){
+      axios.get('http://localhost:8080/search/keyword?keyword=' +  this.state.searchText)
           .then(res => {
             this.setState({
               movieDetails: res.data.movies,
@@ -100,6 +97,11 @@ class Jumbotron extends Component{
           });
     }
 
+  handleChange(event){
+    this.setState({
+      searchText: event,
+    });
+  }
 
   render(){
     const { classes } = this.props;
@@ -111,16 +113,26 @@ class Jumbotron extends Component{
         <main>
         <SearchBar id = "searchText"
            onRequestSearch={this.requestSearch}
+           onChange={this.handleChange.bind(this)}
            style={{
              margin: '0 auto',
              maxWidth: 800, marginTop: '3%'
            }}
          />
+         <Button
+          style = {{marginTop: '2%', backgroundColor: '#DCDCDC', width: '15%'}}
+           onClick={this.requestSearch}> Search
+         </Button>
+         <Button
+           style = {{marginTop: '2%', backgroundColor: '#DCDCDC', marginLeft: '3%', width: '15%'}}>
+           Get Suggestions
+         </Button>
           <div className={classNames(classes.layout, classes.cardGrid)}>
             {/* End hero unit */}
             <Grid container spacing={40}>
               {this.state.movieDetails.map(card => (
                 <Grid item key={card} sm={6} md={4} lg={3}>
+                <Link to= {"/movieDetails/" + card["movie_id"]} style={{textDecoration: 'none'}}>
                   <Card className={classes.card} >
                   <CardMedia
                   component="img"
@@ -135,22 +147,20 @@ class Jumbotron extends Component{
 
                     </CardContent>
                     <CardActions>
-                      <Link to= {"/movieDetails/" + card["movie_id"]}>Open</Link>
                       <Typography gutterBottom variant="h10" component="h5">
-                        {card["vote_count"]}
+                      <NonEditableStarRating rating = {card["vote_average"]}/>
                       </Typography>
 
                     </CardActions>
                   </Card>
+                  </Link>
+
                   </Grid>
               ))}
 
             </Grid>
           </div>
         </main>
-        {/* Footer */}
-        <Footer/>
-        {/* End footer */}
       </React.Fragment>
     );
   }
