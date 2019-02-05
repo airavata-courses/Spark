@@ -1,13 +1,9 @@
-from database import Base, UserMovieRating, MovieGenre
 from movie import Movie
 
 import json
 import requests
 from flask import Flask, jsonify
 from flask_restful import reqparse, Api, Resource, abort
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-
 
 app = Flask(__name__)
 api = Api(app)
@@ -15,12 +11,8 @@ api = Api(app)
 # To parse the arguments in the requests
 parser = reqparse.RequestParser()
 
-# Creation of sql engine and database session to talk to database (read, write and delete rows from the tables within movie schema)
-engine = create_engine('mysql+pymysql://' + 'root' + ':' + 'aimhigher01' + '@' + 'localhost' +':' + '3306' + '/' + 'movie')
-engine.connect()
-Base.metadata.bind = engine
-DBSession = sessionmaker(autoflush=True, bind=engine)
-dbSession = DBSession()
+# URL for the database microservices
+Db_URL = "http://localhost:8080/usermovierating"
 
 # TMDb url
 TMDb_URL = "https://api.themoviedb.org/3/"
@@ -31,21 +23,23 @@ NUMBER_OF_RECOMMENDATIONS = 10
 
 class Suggestion(Resource):
     def get(self):
-        parser.add_argument('user_id', required=True, help="User_id cannot be blank!")
+        parser.add_argument('userId', required=True, help="User Id cannot be blank!")
         args = parser.parse_args()
-        user_id = args['user_id']
+        user_id = args['userId']
         try:
-            movie_ratings = dbSession.query(UserMovieRating).filter_by(user_id=user_id)
+            db_url = Db_URL + "/getbyuserid"
+            params = {"user_id" : user_id}
+            movie_ratings = json.loads(requests.get(url=db_url, params=params).text)
 
             # Creation of a datastructure which stores the movie id and its corresponding rating
-            data = dict()
+            seen_movies = dict()
             for x in movie_ratings:
-                data[x.movie_id] = x.rating
+                seen_movies[x['movieId']] = x['rating']
 
-            if len(data.keys())<=3:
-                top_rated_movies = data.get
+            if len(seen_movies.keys())<=3:
+                top_rated_movies = seen_movies.keys()
             else:
-                top_rated_movies = sorted(data, key=data.get, reverse=True)[:NUMBER_OF_TOP_RATED_MOVIES]
+                top_rated_movies = sorted(seen_movies, key=seen_movies.get, reverse=True)[:NUMBER_OF_TOP_RATED_MOVIES]
 
             # To find recommendation, find the top 3 rated movie by the user, find movies similar to that using the api
             suggestions = list()
@@ -56,6 +50,8 @@ class Suggestion(Resource):
                 if response.status_code == requests.codes.ok:
                     suggestions = suggestions + json.loads(response.text)['results']
 
+            # Filter out the already seen movies from the suggestions list
+            suggestions = list(filter(lambda x:x['id'] not in seen_movies.keys(), suggestions))
             # Find the top 10 recommended movies by sorting on popularity index in the details of movie returned by TMDb
             recommended_movies = sorted(suggestions, key=lambda k :k['popularity'], reverse=True)[:NUMBER_OF_RECOMMENDATIONS]
 
