@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MovieDetailsService {
@@ -17,20 +18,20 @@ public class MovieDetailsService {
     @Autowired
     private Environment env;
 
-    public MovieDetails getMovieDetailsById(@NonNull int id) {
-        final String uri = String.format(env.getProperty("url.url_getById") + id +"?api_key=" + env.getProperty("url.applicationKey") + "&language=en-US");
+    public MovieDetails getMovieDetailsById(@NonNull UUID userId, @NonNull int movieId) {
+        final String uri = String.format(env.getProperty("url.url_getById") + movieId +"?api_key=" + env.getProperty("url.applicationKey") + "&language=en-US");
         RestTemplate restTemplate = new RestTemplate();
 
         try {
             MovieDetails movieDetails = restTemplate.getForObject(uri, MovieDetails.class);
 
             if (movieDetails != null) {
-                CastAndCrew castAndCrew = getCastAndCrewByMovieId(id);
+                CastAndCrew castAndCrew = getCastAndCrewByMovieId(movieId);
                 if (castAndCrew != null) {
                     movieDetails.setCast(castAndCrew.getCast());
                     movieDetails.setCrew(castAndCrew.getCrew());
                 }
-                if (checkSeenStatus(3, movieDetails.getId())) {
+                if (checkSeenStatus(userId, movieDetails.getId())) {
                     movieDetails.setSeen(true);
                 } else {
                     movieDetails.setSeen(false);
@@ -58,7 +59,7 @@ public class MovieDetailsService {
         return null;
     }
 
-    public boolean checkSeenStatus(@NonNull int userid, @NonNull int movieid) {
+    public boolean checkSeenStatus(@NonNull UUID userid, @NonNull int movieid) {
         final String uri = String.format("http://localhost:8080/usermovierating/getbyuseridmovieid?user_id=%s&movie_id=%s", userid, movieid);
         RestTemplate restTemplate = new RestTemplate();
         try {

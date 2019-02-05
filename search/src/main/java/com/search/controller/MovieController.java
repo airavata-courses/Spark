@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 public class MovieController implements MovieApi {
 
@@ -14,7 +16,7 @@ public class MovieController implements MovieApi {
     private MovieDetailsService movieDetailsService;
 
     @Override
-    public MovieDetails getMovieDetails(@RequestParam(name="movieId") int movieId) {
-        return movieDetailsService.getMovieDetailsById(movieId);
+    public MovieDetails getMovieDetails(@RequestParam(name="userId") UUID userId, @RequestParam(name="movieId") int movieId) {
+        return movieDetailsService.getMovieDetailsById(userId, movieId);
     }
 }

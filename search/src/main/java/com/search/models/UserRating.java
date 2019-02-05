@@ -1,12 +1,14 @@
 package com.search.models;
 
+import java.util.UUID;
+
 public class UserRating {
-    private long userId;
+    private UUID userId;
     private long movieId;
     private String movieName;
     private float rating;
 
-    public long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
@@ -22,7 +24,7 @@ public class UserRating {
         return rating;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
