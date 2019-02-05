@@ -1,9 +1,10 @@
-from movie import Movie
-
 import json
 import requests
 from flask import Flask, jsonify
 from flask_restful import reqparse, Api, Resource, abort
+from flask_cors import CORS, cross_origin
+
+from movie import Movie
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,6 +23,7 @@ NUMBER_OF_TOP_LIKED_GENRE = 3
 NUMBER_OF_RECOMMENDATIONS = 10
 
 class Suggestion(Resource):
+    @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
     def get(self):
         parser.add_argument('userId', required=True, help="User Id cannot be blank!")
         args = parser.parse_args()
@@ -64,7 +66,7 @@ class Suggestion(Resource):
                             movie['title'],
                             movie['vote_count'],
                             movie['vote_average']).returndict())
-            return jsonify(result)
+            return jsonify(dict({"movies":result}))
 
         except Exception as e:
             abort(400, message=str(e))
