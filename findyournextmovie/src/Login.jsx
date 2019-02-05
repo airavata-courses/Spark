@@ -15,6 +15,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import muiTheme from './Theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import axios from 'axios';
+import Alert from "react-s-alert";
 
 const styles = theme => ({
   main: {
@@ -61,7 +62,6 @@ class LogIn extends Component{
     }
 
     handleInputChange(event) {
-      console.log('input changing');
     const target = event.target;
     const inputName = target.name;
     const inputValue = target.value;
@@ -73,16 +73,13 @@ class LogIn extends Component{
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log('state :: ' + JSON.stringify(this.state));
     const loginRequest = Object.assign({}, this.state);
-    console.log('signUpRequest' + JSON.stringify(loginRequest));
 
     axios.post('http://localhost:8080/api/login',  loginRequest )
         .then(res => {
-          console.log(res);
-          console.log(res.data);
+          Alert.error("Login successful.");
         }).catch(error => {
-          console.log('error!!');
+          Alert.error("Sorry! Some error occurred.");
         });
     }
 

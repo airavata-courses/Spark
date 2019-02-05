@@ -16,6 +16,7 @@ import muiTheme from './Theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
+import Alert from "react-s-alert";
 
 const styles = theme => ({
   main: {
@@ -68,7 +69,6 @@ class SignIn extends Component{
       this.handleSubmit = this.handleSubmit.bind(this);
     }
   handleInputChange(event) {
-    console.log('input changing');
   const target = event.target;
   const inputName = target.name;
   const inputValue = target.value;
@@ -80,19 +80,16 @@ class SignIn extends Component{
 
 handleSubmit(event) {
   event.preventDefault();
-  console.log('state :: ' + JSON.stringify(this.state));
   const signUpRequest = Object.assign({}, this.state);
   signUpRequest['dob'] = '01-01-1992';
   signUpRequest['gender'] = 'F';
   signUpRequest['country'] = 'India'
-  console.log('signUpRequest' + JSON.stringify(signUpRequest));
 
   axios.post('http://localhost:8080/api/register',  signUpRequest )
       .then(res => {
-        console.log(res);
-        console.log(res.data);
+        Alert.success("Signed in successfully.");
       }).catch(error => {
-        console.log('error!!');
+        Alert.error("Sorry! Some error occurred.");
       });
   }
 

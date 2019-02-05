@@ -19,6 +19,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarRating from './StarRating';
+import Alert from "react-s-alert";
 
 const styles = theme => ({
   root: {
@@ -77,7 +78,7 @@ class MovieDetails extends Component {
             movie_id: this.props.match.params.movie_id,
           });
         }).catch(error => {
-          console.log('error!!');
+          Alert.error("Sorry! Some error occurred.");
         });
     }
 

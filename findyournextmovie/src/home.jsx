@@ -18,6 +18,7 @@ import {Tabs, Tab} from '@material-ui/core/'
 import { Link } from "react-router-dom";
 import MovieDetails from './MovieDetails';
 import NonEditableStarRating from './NonEditableStarRating';
+import Alert from "react-s-alert";
 
 const styles = theme => ({
   icon: {
@@ -82,7 +83,7 @@ class Jumbotron extends Component{
             imgPath: "https://image.tmdb.org/t/p/w500/" + res.data.movies.poster_path,
           });
         }).catch(error => {
-          console.log('error!!');
+          Alert.error("Sorry! Some error occurred.");
         });
     }
 
@@ -93,7 +94,7 @@ class Jumbotron extends Component{
               movieDetails: res.data.movies,
             });
           }).catch(error => {
-            console.log('error!!');
+            Alert.error("Sorry! Some error occurred.");
           });
     }
 
@@ -101,6 +102,16 @@ class Jumbotron extends Component{
     this.setState({
       searchText: event,
     });
+  }
+
+  getSuggestions(){
+    axios.get('http://localhost:5000/suggestion?userId=' + 123 )
+        .then(res => {
+          this.setState({
+            movieDetails: res.data.movies,
+          });        }).catch(error => {
+            Alert.error("Sorry! Some error occurred.");
+        });
   }
 
   render(){
@@ -124,7 +135,9 @@ class Jumbotron extends Component{
            onClick={this.requestSearch}> Search
          </Button>
          <Button
-           style = {{marginTop: '2%', backgroundColor: '#DCDCDC', marginLeft: '3%', width: '15%'}}>
+           style = {{marginTop: '2%', backgroundColor: '#DCDCDC', marginLeft: '3%', width: '15%'}}
+           onClick = {this.getSuggestions.bind(this)}
+           >
            Get Suggestions
          </Button>
           <div className={classNames(classes.layout, classes.cardGrid)}>

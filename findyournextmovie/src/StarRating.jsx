@@ -22,7 +22,6 @@ class StarRating extends React.Component {
 
     axios.get('http://localhost:8081/usermovierating/getbyuseridmovieid?user_id=' +  '123' + '&movie_id=' + this.props.movie_id)
     .then(res => {
-      console.log('res json :: ' + JSON.stringify(res));
       this.setState({
         rating: res.data.rating,
       });
@@ -30,13 +29,12 @@ class StarRating extends React.Component {
       this.setState({
         rating: 0,
       });
-      console.log('componentWillMount error!!');
+      Alert.error("Sorry! Some error occurred.");
     });
   }
 
   onStarClick(nextValue, prevValue, name) {
     this.setState({rating: nextValue});
-    console.log('rating :: ' + this.state.rating + nextValue);
     var movieData = {};
     movieData["userId"] = '123';
     movieData["movieId"] = this.props.movie_id;
@@ -46,7 +44,7 @@ class StarRating extends React.Component {
         .then(res => {
           Alert.success("Rating saved successfully");
         }).catch(error => {
-          Alert.error("Some error occurred");
+          Alert.error("Sorry! Some error occurred.");
         });
   }
 
