@@ -1,25 +1,15 @@
-// Database connection
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'Shantanu',
-  database : 'movie'
-});
-connection.connect(function(err){
-if(!err) {
-    console.log("Database is connected ... nn");
-} else {
-    console.log("Error connecting database ... nn" + err.message);
-}
-});
-
+// Module for Database connection
+var connection = require('../models/db_connection')
+// Module for password encryption
 var bcrypt = require('bcryptjs');
 
 // API to register new user
 exports.register = function(req,res){
   var today = new Date();
+  var uuid = require('uuid');
+  console.log("UUID is: "+ uuid.v4());
   var users={
+    "user_id":uuid.v4(),
     "first_name":req.body.first_name,
     "last_name":req.body.last_name,
     "email":req.body.email,
@@ -68,7 +58,8 @@ exports.login = function(req,res){
       if(bcrypt.compareSync(password, results[0].password)) {
         res.send({
           "code":200,
-          "success":"login sucessfull"
+          "success":"login sucessfull",
+          "user_id":results[0].user_id
             });
       } else {
         res.send({
