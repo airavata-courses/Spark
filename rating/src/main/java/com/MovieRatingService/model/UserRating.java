@@ -1,16 +1,18 @@
 package com.MovieRatingService.model;
 
+import java.util.UUID;
+
 public class UserRating {
-    private long userId;
+    private UUID userId;
     private long movieId;
     private String movieName;
     private float rating;
 
-    public long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
@@ -38,7 +40,7 @@ public class UserRating {
         this.rating = rating;
     }
 
-    public UserRating(long userId, long movieId, String movieName, float rating) {
+    public UserRating(UUID userId, long movieId, String movieName, float rating) {
         this.userId = userId;
         this.movieId = movieId;
         this.movieName = movieName;

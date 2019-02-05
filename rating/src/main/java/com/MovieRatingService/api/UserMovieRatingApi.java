@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/usermovierating")
@@ -13,9 +14,9 @@ public interface UserMovieRatingApi {
     ResponseEntity<?> saveUserRating(@RequestBody UserRating userRating);
 
     @GetMapping("/getbyuserid")
-    List<UserRating> getByUserId(@RequestParam(name = "user_id") long userId);
+    List<UserRating> getByUserId(@RequestParam(name = "user_id") UUID userId);
 
     @GetMapping("/getbyuseridmovieid")
-    UserRating getByUserIdMovieId(@RequestParam(name = "user_id") long userId,
+    UserRating getByUserIdMovieId(@RequestParam(name = "user_id") UUID userId,
                                         @RequestParam(name = "movie_id") long movieId);
 }

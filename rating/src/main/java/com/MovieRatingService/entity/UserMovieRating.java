@@ -1,14 +1,17 @@
 package com.MovieRatingService.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity @IdClass(UserMovieRatingId.class)
 @Table(name="user_movie_rating")
 public class UserMovieRating {
 
     @Id
-    @Column(name="user_id")
-    private long userId;
+    @Column(name="user_id", columnDefinition = "VARCHAR(100)")
+    private String userId;
 
     @Id
     @Column(name="movie_id")
@@ -24,11 +27,11 @@ public class UserMovieRating {
         super();
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -56,7 +59,7 @@ public class UserMovieRating {
         this.rating = rating;
     }
 
-    public UserMovieRating(long userId, long movieId, String movieName, float rating) {
+    public UserMovieRating(String userId, long movieId, String movieName, float rating) {
         this.userId = userId;
         this.movieId = movieId;
         this.movieName = movieName;
