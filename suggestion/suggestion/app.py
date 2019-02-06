@@ -34,24 +34,34 @@ def suggestion():
         for x in movie_ratings:
             seen_movies[x['movieId']] = x['rating']
 
-        if len(seen_movies.keys())<=3:
-            top_rated_movies = seen_movies.keys()
-        else:
-            top_rated_movies = sorted(seen_movies, key=seen_movies.get, reverse=True)[:NUMBER_OF_TOP_RATED_MOVIES]
-
-        # To find recommendation, find the top 3 rated movie by the user, find movies similar to that using the api
-        suggestions = list()
-        for movie in top_rated_movies:
-            recommendation_url = TMDb_URL + "movie/" + str(movie) + "/similar"
+        # If no movie has been rated by the user, show the popular movies
+        if len(seen_movies.keys())==0:
+            recommendation_url = TMDb_URL + "movie/popular"
             params = {'api_key':API_KEY, 'language' : 'en-US', 'page' : 1}
             response = requests.get(url = recommendation_url, params = params)
             if response.status_code == requests.codes.ok:
-                suggestions = suggestions + json.loads(response.text)['results']
+                suggestions = list(json.loads(response.text)['results'])
+            recommended_movies = sorted(suggestions, key=lambda k :k['popularity'], reverse=True)[:NUMBER_OF_RECOMMENDATIONS]
 
-        # Filter out the already seen movies from the suggestions list
-        suggestions = list(filter(lambda x:x['id'] not in seen_movies.keys(), suggestions))
-        # Find the top 10 recommended movies by sorting on popularity index in the details of movie returned by TMDb
-        recommended_movies = sorted(suggestions, key=lambda k :k['popularity'], reverse=True)[:NUMBER_OF_RECOMMENDATIONS]
+        else:
+            if len(seen_movies.keys())<=3:
+                top_rated_movies = seen_movies.keys()
+            else:
+                top_rated_movies = sorted(seen_movies, key=seen_movies.get, reverse=True)[:NUMBER_OF_TOP_RATED_MOVIES]
+
+            # To find recommendation, find the top 3 rated movie by the user, find movies similar to that using the api
+            suggestions = list()
+            for movie in top_rated_movies:
+                recommendation_url = TMDb_URL + "movie/" + str(movie) + "/similar"
+                params = {'api_key':API_KEY, 'language' : 'en-US', 'page' : 1}
+                response = requests.get(url = recommendation_url, params = params)
+                if response.status_code == requests.codes.ok:
+                    suggestions = suggestions + json.loads(response.text)['results']
+
+            # Filter out the already seen movies from the suggestions list
+            suggestions = list(filter(lambda x:x['id'] not in seen_movies.keys(), suggestions))
+            # Find the top 10 recommended movies by sorting on popularity index in the details of movie returned by TMDb
+            recommended_movies = sorted(suggestions, key=lambda k :k['popularity'], reverse=True)[:NUMBER_OF_RECOMMENDATIONS]
 
         result = list()
         for movie in recommended_movies:
