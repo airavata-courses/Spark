@@ -16,7 +16,7 @@ public class MovieController implements MovieApi {
     private MovieDetailsService movieDetailsService;
 
     @Override
-    public MovieDetails getMovieDetails(@RequestParam(name="userId") UUID userId, @RequestParam(name="movieId") int movieId) {
-        return movieDetailsService.getMovieDetailsById(userId, movieId);
+    public MovieDetails getMovieDetails(@RequestParam(name="movieId") int movieId) {
+        return movieDetailsService.getMovieDetailsById(movieId);
     }
 }
