@@ -48,7 +48,7 @@ exports.login = function(req,res){
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
   if (error) {
     // console.log("error ocurred",error);
-    res.send({
+    res.status(400).send({
       "code":400,
       "failed":"error ocurred"
     })
@@ -62,7 +62,7 @@ exports.login = function(req,res){
           "user_id":results[0].user_id
             });
       } else {
-        res.send({
+        res.status(400).send({
           "code":204,
           "success":"Email and password does not match"
             });
@@ -70,9 +70,8 @@ exports.login = function(req,res){
 
     }
     else{
-      res.send({
-        "code":404,
-        "failed":"Email does not exits"
+      res.status(404).send({
+        "message":"Email does not exits"
           });
     }
   }
