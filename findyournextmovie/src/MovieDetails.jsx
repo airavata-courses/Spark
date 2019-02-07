@@ -20,6 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarRating from './StarRating';
 import Alert from "react-s-alert";
+import NonEditableStarRating from './NonEditableStarRating';
 
 const styles = theme => ({
   root: {
@@ -106,7 +107,13 @@ class MovieDetails extends Component {
     const genre = this.state.movieGenre.map((item, key) =>
       <span> {item.name} </span>
     );
-
+    let star;
+    if(localStorage.getItem('isAuthenticated') === null || localStorage.getItem('isAuthenticated') == "false"){
+      star = <NonEditableStarRating rating = {0}/>
+    }else{
+      star = <StarRating movie_id = {this.props.match.params.movie_id}
+      movie_name = {this.state.movieDetails['title']}/>
+    }
 
     return(
 <div className={classes.root} style={{marginTop: '2%'}}>
@@ -124,9 +131,8 @@ class MovieDetails extends Component {
            </Typography>
 
            <Typography gutterBottom variant="h10" component="h5">
-           <StarRating movie_id = {this.props.match.params.movie_id}
-           movie_name = {this.state.movieDetails['title']}/>
-           Vote Average: {this.state.movieDetails['vote_average']}
+           {star}
+          Vote Average: {this.state.movieDetails['vote_average']}
            </Typography>
 
            <Typography gutterBottom variant="h10" component="h3">

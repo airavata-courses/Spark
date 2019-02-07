@@ -49,7 +49,6 @@ class StarRating extends React.Component {
         movieData["movieId"] = this.props.movie_id;
         movieData["movieName"] = this.props.movie_name;
         movieData["rating"] = nextValue;
-        console.log('movie data :: ' + JSON.stringify(movieData));
         axios.post('http://localhost:8080/usermovierating/save',  movieData )
             .then(res => {
               Alert.success("Rating saved successfully");

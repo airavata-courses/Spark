@@ -62,7 +62,7 @@ const styles = theme => ({
   },
 });
 
-class Jumbotron extends Component{
+class Home extends Component{
   constructor(props) {
       super(props);
       this.state = {
@@ -122,7 +122,6 @@ class Jumbotron extends Component{
               Alert.error("Sorry! Some error occurred.");
           });
       }else{
-        console.log('in else condition');
         this.props.history.push('\login')
       }
   }
@@ -192,4 +191,4 @@ class Jumbotron extends Component{
   }
 }
 
-export default withStyles(styles)(Jumbotron);
+export default withStyles(styles)(Home);

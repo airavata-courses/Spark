@@ -84,7 +84,7 @@ class LogIn extends Component{
           this.props.history.push("/home");
         }).catch(error => {
           localStorage.setItem('isAuthenticated', false);
-          Alert.error("Sorry! Some error occurred."+ error);
+          Alert.error("Sorry! Some error occurred.");
         });
     }
 

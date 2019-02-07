@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
+import Alert from "react-s-alert";
 
 const styles = {
   root: {
@@ -47,9 +48,11 @@ class MenuAppBar extends React.Component {
   };
 
   logout(){
+    console.log('in log out');
     localStorage.setItem('isAuthenticated', false);
     localStorage.setItem('ACCESS_TOKEN', "");
-
+    if(localStorage.getItem('isAuthenticated') == "false")
+      Alert.success("Logged out successfully");
   }
 
   render() {
@@ -58,8 +61,8 @@ class MenuAppBar extends React.Component {
     const open = Boolean(anchorEl);
 
     let logOption;
-    if(localStorage.getItem('isAuthenticated') == true){
-      logOption = <Link to= {"/home"} style={{textDecoration: 'none', width: '5%'}} onClick = {this.logout()}> Log Out </Link>
+    if(localStorage.getItem('isAuthenticated') == "true"){
+      logOption = <Link to= {"/home"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}} onClick = {this.logout.bind(this)}> Log Out </Link>
     }else{
       logOption = <Link to= {"/login"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}}> Log In </Link>
     }
@@ -74,7 +77,6 @@ class MenuAppBar extends React.Component {
               </Typography>
             </Link>
                 <Typography variant="h10" color="white" style={{marginLeft: '2%', width: '5%'}}>
-
                 {logOption}
                 </Typography>
           </Toolbar>
