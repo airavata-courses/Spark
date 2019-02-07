@@ -13,6 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from "react-router-dom";
+import Button from '@material-ui/core/Button';
 
 const styles = {
   root: {
@@ -45,11 +46,23 @@ class MenuAppBar extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  logout(){
+    localStorage.setItem('isAuthenticated', false);
+    localStorage.setItem('ACCESS_TOKEN', "");
+
+  }
+
   render() {
     const { classes } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
+    let logOption;
+    if(localStorage.getItem('isAuthenticated') == true){
+      logOption = <Link to= {"/home"} style={{textDecoration: 'none', width: '5%'}} onClick = {this.logout()}> Log Out </Link>
+    }else{
+      logOption = <Link to= {"/login"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}}> Log In </Link>
+    }
     return (
       <div className={classes.root}>
 
@@ -60,37 +73,10 @@ class MenuAppBar extends React.Component {
                 Find Your Next Movie
               </Typography>
             </Link>
-            {auth && (
-              <div>
-                <IconButton
-                  aria-owns={open ? 'menu-appbar' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={this.handleClose}
-                >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                  <MenuItem onClick={this.handleClose}>Log Out</MenuItem>
+                <Typography variant="h10" color="white" style={{marginLeft: '2%', width: '5%'}}>
 
-                </Menu>
-              </div>
-            )}
+                {logOption}
+                </Typography>
           </Toolbar>
         </AppBar>
       </div>

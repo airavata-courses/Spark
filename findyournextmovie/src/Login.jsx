@@ -16,6 +16,7 @@ import muiTheme from './Theme';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import axios from 'axios';
 import Alert from "react-s-alert";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
   main: {
@@ -55,7 +56,7 @@ class LogIn extends Component{
       super(props);
       this.state = {
         email: "",
-        password: ""
+        password: "",
       };
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -75,17 +76,22 @@ class LogIn extends Component{
     event.preventDefault();
     const loginRequest = Object.assign({}, this.state);
 
-    axios.post('http://localhost:8080/api/login',  loginRequest )
+    axios.post('http://localhost:8082/api/login',  loginRequest )
         .then(res => {
-          Alert.error("Login successful.");
+          localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
+          localStorage.setItem('isAuthenticated', true);
+          Alert.success("Login successful");
+          this.props.history.push("/home");
         }).catch(error => {
-          Alert.error("Sorry! Some error occurred.");
+          localStorage.setItem('isAuthenticated', false);
+          Alert.error("Sorry! Some error occurred."+ error);
         });
     }
 
   render(){
     const { classes } = this.props;
     return(
+
       <MuiThemeProvider theme={muiTheme}>
 			<CssBaseline />
       <main className={classes.main}>
@@ -110,14 +116,20 @@ class LogIn extends Component{
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            > Log In
-          </Button>
+              <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                > Log In
+              </Button>
+          <Typography gutterBottom variant="h10" component="h5" style={{marginTop:'2%'}}>
+            New User?
+            <Link to= {"/signin/"} style={{textDecoration: 'none'}}> Sign In
+            </Link>
+            &nbsp;here
+          </Typography>
           </form>
         </Paper>
       </main>

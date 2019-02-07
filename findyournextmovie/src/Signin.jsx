@@ -17,6 +17,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import Alert from "react-s-alert";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
   main: {
@@ -85,9 +86,10 @@ handleSubmit(event) {
   signUpRequest['gender'] = 'F';
   signUpRequest['country'] = 'India'
 
-  axios.post('http://localhost:8080/api/register',  signUpRequest )
+  axios.post('http://localhost:8082/api/register',  signUpRequest )
       .then(res => {
         Alert.success("Signed in successfully.");
+        this.props.history.push("/login");
       }).catch(error => {
         Alert.error("Sorry! Some error occurred.");
       });
@@ -141,6 +143,12 @@ handleSubmit(event) {
               className={classes.submit}
             > Sign In
           </Button>
+          <Typography gutterBottom variant="h10" component="h5" style={{marginTop:'2%'}}>
+            Already have an account?
+            <Link to= {"/login/"} style={{textDecoration: 'none'}}> Log In
+            </Link>
+            &nbsp;here
+          </Typography>
           </form>
         </Paper>
       </main>

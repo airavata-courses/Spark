@@ -70,13 +70,19 @@ class Jumbotron extends Component{
         movieName: "",
         imgPath: "",
         searchText: "",
+        isAuthenticated: "",
+        userId: "",
       };
       this.requestSearch = this.requestSearch.bind(this);
       this.onClick = this.requestSearch.bind(this);
   }
 
   componentWillMount() {
-    axios.get('http://localhost:8080/search/toprated' )
+    this.setState({
+      isAuthenticated: localStorage.getItem("isAuthenticated"),
+      userId: localStorage.getItem("ACCESS_TOKEN"),
+    });
+    axios.get('http://localhost:8081/search/toprated' )
         .then(res => {
           this.setState({
             movieDetails: res.data.movies,
@@ -88,7 +94,7 @@ class Jumbotron extends Component{
     }
 
   requestSearch(){
-      axios.get('http://localhost:8080/search/keyword?keyword=' +  this.state.searchText)
+      axios.get('http://localhost:8081/search/keyword?keyword=' +  this.state.searchText)
           .then(res => {
             this.setState({
               movieDetails: res.data.movies,
@@ -105,13 +111,20 @@ class Jumbotron extends Component{
   }
 
   getSuggestions(){
-    axios.get('http://localhost:5000/suggestion?userId=' + 123 )
-        .then(res => {
-          this.setState({
-            movieDetails: res.data.movies,
-          });        }).catch(error => {
-            Alert.error("Sorry! Some error occurred.");
-        });
+    if (localStorage.getItem("isAuthenticated") === null) {
+      this.props.history.push('\login');
+    }else if(localStorage.getItem('isAuthenticated') == "true"){
+      axios.get('http://localhost:5000/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
+          .then(res => {
+            this.setState({
+              movieDetails: res.data.movies,
+            });        }).catch(error => {
+              Alert.error("Sorry! Some error occurred.");
+          });
+      }else{
+        console.log('in else condition');
+        this.props.history.push('\login')
+      }
   }
 
   render(){

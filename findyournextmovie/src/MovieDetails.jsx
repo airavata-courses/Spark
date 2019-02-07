@@ -69,7 +69,7 @@ class MovieDetails extends Component {
     }
 
   componentWillMount() {
-    axios.get('http://localhost:8080/movie/details?movieId=' +  this.props.match.params.movie_id)
+    axios.get('http://localhost:8081/movie/details?movieId=' +  this.props.match.params.movie_id)
         .then(res => {
           this.setState({
             movieDetails: res.data,

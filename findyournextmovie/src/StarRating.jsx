@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import StarRatingComponent from 'react-star-rating-component';
 import axios from 'axios';
 import Alert from "react-s-alert";
+import { createHashHistory } from 'history';
+export const history = createHashHistory()
 
 class StarRating extends React.Component {
   constructor() {
@@ -19,33 +21,44 @@ class StarRating extends React.Component {
     this.setState({
       movieId: this.props.movie_id,
     });
-
-    axios.get('http://localhost:8081/usermovierating/getbyuseridmovieid?user_id=' +  '123' + '&movie_id=' + this.props.movie_id)
-    .then(res => {
-      this.setState({
-        rating: res.data.rating,
-      });
-    }).catch(error => {
-      this.setState({
-        rating: 0,
-      });
-      Alert.error("Sorry! Some error occurred.");
-    });
+    if(localStorage.getItem("isAuthenticated") == "true"){
+        axios.get('http://localhost:8080/usermovierating/getbyuseridmovieid?user_id=' + localStorage.getItem("ACCESS_TOKEN") + '&movie_id=' + this.props.movie_id)
+        .then(res => {
+          this.setState({
+            rating: res.data.rating,
+          });
+        }).catch(error => {
+          this.setState({
+            rating: 0,
+          });
+        });
+      }else{
+        this.setState({
+          rating: 0,
+        });
+      }
   }
 
   onStarClick(nextValue, prevValue, name) {
-    this.setState({rating: nextValue});
-    var movieData = {};
-    movieData["userId"] = '123';
-    movieData["movieId"] = this.props.movie_id;
-    movieData["movieName"] = this.props.movie_name;
-    movieData["rating"] = nextValue;
-    axios.post('http://localhost:8081/usermovierating/save',  movieData )
-        .then(res => {
-          Alert.success("Rating saved successfully");
-        }).catch(error => {
-          Alert.error("Sorry! Some error occurred.");
-        });
+    if (localStorage.getItem("isAuthenticated") === null) {
+      history.push("/login");
+    }else if(localStorage.getItem('isAuthenticated') == "true"){
+        this.setState({rating: nextValue});
+        var movieData = {};
+        movieData["userId"] = localStorage.getItem("ACCESS_TOKEN");
+        movieData["movieId"] = this.props.movie_id;
+        movieData["movieName"] = this.props.movie_name;
+        movieData["rating"] = nextValue;
+        console.log('movie data :: ' + JSON.stringify(movieData));
+        axios.post('http://localhost:8080/usermovierating/save',  movieData )
+            .then(res => {
+              Alert.success("Rating saved successfully");
+            }).catch(error => {
+              Alert.error("Sorry! Some error occurred.");
+            });
+      }else{
+        history.push('\login');
+      }
   }
 
   render() {

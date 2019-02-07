@@ -9,6 +9,8 @@ import Route from 'react-router-dom/Route';
 import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
+import LogIn from "./Login";
+import SignIn from "./Signin";
 
 class App extends Component {
   render() {
@@ -18,7 +20,10 @@ class App extends Component {
           <MenuAppBar></MenuAppBar>
           <Switch>
             <Route exact path = "/" component={Jumbotron}></Route>
+            <Route exact path = "/home" component={Jumbotron}></Route>
             <Route exact path = "/movieDetails/:movie_id" component={MovieDetails}></Route>
+            <Route exact path = "/login" component={LogIn}></Route>
+            <Route exact path = "/signin" component={SignIn}></Route>
           </Switch>
           <Alert
             stack={{ limit: 3 }}
