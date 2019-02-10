@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface UserMovieRatingRepository extends CrudRepository<UserMovieRating, UserMovieRatingId>{
-    List<UserMovieRating> findAllByUserId(UUID userId);
+    List<UserMovieRating> findAllByUserId(String userId);
 }

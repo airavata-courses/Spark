@@ -39,7 +39,7 @@ public class UserMovieRatingController implements UserMovieRatingApi {
 
     @Override
     public List<UserRating> getByUserId(@RequestParam(name = "user_id") UUID userId) {
-        List<UserMovieRating> userMovieRatings = userMovieRatingRepository.findAllByUserId(userId);
+        List<UserMovieRating> userMovieRatings = userMovieRatingRepository.findAllByUserId(userId.toString());
         List<UserRating> userRatings = userMovieRatings.stream().map(userRatingMapper::toUserRating).collect(Collectors.toList());
         return userRatings;
     }
