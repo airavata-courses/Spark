@@ -2,7 +2,6 @@ import json
 import requests
 from flask import Flask, jsonify, request
 from flask import Flask, current_app
-# from flask_restful import reqparse, Api, Resource, abort
 from flask_cors import CORS, cross_origin
 
 from movie import Movie
