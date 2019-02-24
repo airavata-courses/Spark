@@ -5,6 +5,9 @@ pipeline {
             steps {
                 sh 'sudo apt-get install maven -y'
 		        sh 'mvn --version'
+		        sh 'sudo apt-get install mysql-server -y'
+		        sh 'systemctl start mysql'
+
             }
         }
         stage('build maven') {
