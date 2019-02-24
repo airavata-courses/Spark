@@ -9,7 +9,8 @@ pipeline {
         }
         stage('build maven') {
             steps {
-                dir(search) {
+                dir("search") {
+                    sh 'pwd'
                     sh 'mvn clean install'
                     sh 'mvn install package'
                 }
