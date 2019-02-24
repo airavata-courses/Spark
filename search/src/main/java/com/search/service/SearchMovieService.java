@@ -22,6 +22,9 @@ public class SearchMovieService {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     public MovieList searchByKeyword(@NonNull String key) {
         final String uri = String.format(env.getProperty("url.url_searchBykeyword")+"query=%s", key);
 
@@ -33,8 +36,8 @@ public class SearchMovieService {
         return restApiCall(uri);
     }
 
-    private MovieList restApiCall(String uri) {
-        RestTemplate restTemplate = new RestTemplate();
+    public MovieList restApiCall(String uri) {
+//        RestTemplate restTemplate = new RestTemplate();
         try {
             SearchMovieList result = restTemplate.getForObject(uri, SearchMovieList.class);
 

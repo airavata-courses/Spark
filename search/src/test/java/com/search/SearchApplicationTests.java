@@ -1,4 +1,4 @@
-package com.search.search;
+package com.search;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

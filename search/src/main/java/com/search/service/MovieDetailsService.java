@@ -16,9 +16,12 @@ public class MovieDetailsService {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     public MovieDetails getMovieDetailsById(@NonNull int movieId) {
         final String uri = String.format(env.getProperty("url.url_getById") + movieId +"?api_key=" + env.getProperty("url.applicationKey") + "&language=en-US");
-        RestTemplate restTemplate = new RestTemplate();
+//        RestTemplate restTemplate = new RestTemplate();
 
         try {
             MovieDetails movieDetails = restTemplate.getForObject(uri, MovieDetails.class);
@@ -40,7 +43,7 @@ public class MovieDetailsService {
 
     public CastAndCrew getCastAndCrewByMovieId(@NonNull int id) {
         final String uri = String.format("https://api.themoviedb.org/3/movie/" + id +"/credits?api_key=" + env.getProperty("url.applicationKey"));
-        RestTemplate restTemplate = new RestTemplate();
+//        RestTemplate restTemplate = new RestTemplate();
 
         try {
             CastAndCrew castAndCrew = restTemplate.getForObject(uri, CastAndCrew.class);
