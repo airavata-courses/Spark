@@ -5,8 +5,6 @@ pipeline {
             steps {
                 	sh 'sudo apt-get install maven -y'
 		        sh 'mvn --version'
-			sh 'sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"'
-			sh 'sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"'
 		    	sh 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7'
             }
         }
