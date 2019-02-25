@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'npm install'
+                dir("findyournextmovie") {
+                    sh 'npm install'
+                }
             }
         }
 
