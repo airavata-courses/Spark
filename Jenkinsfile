@@ -24,8 +24,8 @@ pipeline {
 			sh 'ssh ubuntu@149.165.170.39 sudo apt install default-jdk -y'
 			sh 'ssh ubuntu@149.165.170.39 rm -rf /home/ubuntu/Spark/'
 			sh 'ssh ubuntu@149.165.170.39 mkdir -p /home/ubuntu/Spark/'
-			sh 'scp -r /var/lib/jenkins/jobs/search-build-test-deploy/lastSuccessful/archive/search/target/search-0.0.1-SNAPSHOT.jar ubuntu@149.165.170.39:/home/ubuntu/Spark/'
-                	sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh ubuntu@149.165.170.39 java -jar /home/ubuntu/Spark/search-0.0.1-SNAPSHOT.jar'
+			sh 'scp -r /var/lib/jenkins/workspace/search-build-test-deploy/search/target/search-0.0.1-SNAPSHOT.jar ubuntu@149.165.170.39:/home/ubuntu/Spark/'
+                	sh 'ssh -f ubuntu@149.165.170.39 java -jar /home/ubuntu/Spark/search-0.0.1-SNAPSHOT.jar'
 		} 	
     }
 }
