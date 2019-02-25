@@ -5,7 +5,9 @@ pipeline {
             steps {
                 sh 'sudo apt-get install maven -y'
 		        sh 'mvn --version'
-			sh 'bash /home/ubuntu/test_mysql.sh'
+			sh 'echo "mysql-server-5.7 mysql-server/root_password password root" | debconf-set-selections'
+		    	sh 'echo "mysql-server-5.7 mysql-server/root_password_again password root" | debconf-set-selections'
+		    	sh 'DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7'
             }
         }
         stage('build maven') {
