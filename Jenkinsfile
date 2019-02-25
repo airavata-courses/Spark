@@ -6,7 +6,7 @@ pipeline {
                 	sh 'sudo apt-get install maven -y'
 		        sh 'mvn --version'
 		    	sh 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7'
-		    	sh 'sudo mysqladmin -uroot -proot create movie'
+		    	sh 'sudo mysql -uroot -proot -e "create database if not exists movie"'
             }
         }
         stage('build maven') {
