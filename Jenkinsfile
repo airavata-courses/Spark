@@ -6,8 +6,8 @@ pipeline {
             steps {
                 sh 'sudo npm install -g create-react-app'
                 dir('findyournextmovie'){
-                   sh 'npm install'
-                   sh 'npm start'
+                   sh 'sudo npm install'
+                   sh 'sudo npm start'
                 }
             }
         }
