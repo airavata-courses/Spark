@@ -5,7 +5,7 @@ pipeline {
             steps {
                 sh 'sudo apt-get install maven -y'
 		        sh 'mvn --version'
-			sh '/home/ubuntu/test_mysql.sh'
+			sh 'sudo /home/ubuntu/test_mysql.sh'
             }
         }
         stage('build maven') {
