@@ -13,6 +13,7 @@ pipeline {
             steps {
               sh '''
                 ssh ubuntu@149.165.170.119 '
+                    killall -9 node
                     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
                     sudo apt-get install -y nodejs
                     sudo apt-get install -y npm
@@ -33,7 +34,6 @@ pipeline {
               sh '''
                 JENKINS_NODE_COOKIE=dontKillMe nohup ssh ubuntu@149.165.170.119 '
                     cd Spark/findyournextmovie
-                    pwd
                     npm start
                 '
               '''
