@@ -14,7 +14,7 @@ pipeline {
               sh '''
                 ssh ubuntu@149.165.170.119 '
                     sudo apt-get install -y nodejs
-                    sudo apt-get install npm
+                    sudo apt-get install -y npm
                 '
               '''
               sh '''
