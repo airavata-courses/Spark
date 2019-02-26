@@ -24,7 +24,7 @@ pipeline {
 		    archiveArtifacts artifacts: 'rating/target/rating-0.0.1-SNAPSHOT.jar'
 		    sh '''
 		        JENKINS_NODE_COOKIE=dontKillMe scp -r /var/lib/jenkins/workspace/rating-build-test-deploy/rating/target/rating-0.0.1-SNAPSHOT.jar ubuntu@149.165.168.227:/home/ubuntu/Spark/
-			nohup ssh -f ubuntu@149.165.168.227 '
+			nohup ssh ubuntu@149.165.168.227 '
 			sudo apt update
 			sudo apt install default-jdk -y
 			sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
