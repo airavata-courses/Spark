@@ -21,6 +21,7 @@ pipeline {
                     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
                     sudo mysql -uroot -proot -e "create database if not exists movie"
                     sudo mysql -uroot -proot -e "CREATE TABLE IF NOT EXISTS movie.users (user_id varchar(36), first_name VARCHAR(20), last_name VARCHAR(20), email VARCHAR(50), password VARCHAR(100), dob DATE, gender CHAR(1), country VARCHAR(20), created DATE, modified DATE)"
+                    sudo mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'"
                     rm -r Spark
                     git clone https://github.com/airavata-courses/Spark.git
                     cd Spark/
