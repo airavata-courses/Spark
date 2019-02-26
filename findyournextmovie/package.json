@@ -18,7 +18,7 @@
     "react-star-rating-component": "^1.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HOST=http://149.165.157.231 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
