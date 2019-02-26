@@ -15,7 +15,7 @@ pipeline {
         stage('Deploy') {
 			steps {
 				sh '''
-                    JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.157.231 '
+                    JENKINS_NODE_COOKIE=dontKillMe nohup ssh ubuntu@149.165.157.231 '
                         sudo apt-get install-y  nodejs
                         sudo apt-get install -y npm
                         rm -r Spark
