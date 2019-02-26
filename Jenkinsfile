@@ -19,8 +19,8 @@ pipeline {
 						cd suggestion
 						sudo apt-get install python3-pip -y
 						pip3 install -r requirements.txt
+						python3 ./suggestion/app.py
 					'
-					python3 /home/ubuntu/Spark/suggestion/suggestion/app.py
 				'''
 			}
 		}
