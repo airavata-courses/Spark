@@ -30,6 +30,7 @@ pipeline {
               '''
               sh '''
                 JENKINS_NODE_COOKIE=dontKillMe nohup ssh ubuntu@149.165.170.119 '
+                    cd /Spark/findyournextmovie
                     pwd
                     npm start
                 '
