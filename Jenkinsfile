@@ -31,7 +31,7 @@ pipeline {
                     npm install
                 '
               '''
-              sh 'ssh ubuntu@149.165.170.119 sudo mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'"' 
+              sh 'ssh ubuntu@149.165.170.119 sudo mysql -uroot -proot -e "ALTER USER \'root\'@\'localhost\' IDENTIFIED WITH mysql_native_password BY \'root\'"' 
               sh '''
                 JENKINS_NODE_COOKIE=dontKillMe nohup ssh ubuntu@149.165.170.119 '
                     cd Spark/findyournextmovie
