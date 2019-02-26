@@ -12,9 +12,13 @@ pipeline {
         stage('Deploy') {
             steps {
               sh '''
-                JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.170.119 '
+                ssh ubuntu@149.165.170.119 '
                     sudo apt-get install -y nodejs
                     sudo apt-get install npm
+                '
+              '''
+              sh '''
+                JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.170.119 '
                     sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
                     sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
                     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
