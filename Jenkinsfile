@@ -23,7 +23,9 @@ pipeline {
                         cd Spark/
                         git checkout develop-react_UI
                         cd findyournextmovie/
+			echo 'git job done.. starting npm install'
                         npm install
+			echo 'starting npm start'
                         npm start
 					' 
 				'''
