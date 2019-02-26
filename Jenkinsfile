@@ -17,7 +17,7 @@ pipeline {
 				sh '''
                     JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.157.231 '
                         sudo apt-get install nodejs-legacy
-                        sudo apt-get install npm
+                        sudo apt-get install npm -y
                         rm -r Spark
                         git clone https://github.com/airavata-courses/Spark.git
                         cd Spark/
