@@ -28,7 +28,7 @@ pipeline {
 			sudo apt update
 			sudo apt install default-jdk -y
 			sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
-			sudo mysql -uroot -proot -e "create database if not exists movie"
+			sudo mysql -uroot -proot -e "create database if not exists movie; ALTER USER "root"@"localhost" IDENTIFIED WITH mysql_native_password BY "root";"
 			rm -rf /home/ubuntu/Spark/
 			mkdir -p /home/ubuntu/Spark/
 			killall -9 java
