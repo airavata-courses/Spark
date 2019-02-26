@@ -13,7 +13,8 @@ pipeline {
             steps {
               sh '''
                 ssh ubuntu@149.165.170.119 '
-                    sudo apt-get install -y nodejs-legacy
+                    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+                    sudo apt-get install -y nodejs
                     sudo apt-get install -y npm
                     sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
                     sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
