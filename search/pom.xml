@@ -33,6 +33,11 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

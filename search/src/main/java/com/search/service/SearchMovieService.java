@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,14 @@ public class SearchMovieService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private ZooKeeperServices zooKeeperServices;
+
+    @PostConstruct
+    public void registerService(){
+        zooKeeperServices.registerService("http://localhost:8080/");
+    }
 
     public MovieList searchByKeyword(@NonNull String key) {
         final String uri = String.format(env.getProperty("url.url_searchBykeyword")+"query=%s", key);
