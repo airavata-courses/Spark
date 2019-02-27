@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MovieDetailsTestService {
+public class MovieDetailsServiceTest {
 
     @InjectMocks
     private MovieDetailsService movieDetailsService;

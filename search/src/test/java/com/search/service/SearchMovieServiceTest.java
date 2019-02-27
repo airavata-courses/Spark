@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SearchMovieTestService {
+public class SearchMovieServiceTest {
 
     @Mock
     private MovieListMapper movieListMapper;
