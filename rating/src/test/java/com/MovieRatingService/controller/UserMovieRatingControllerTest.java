@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserMovieRatingTestController {
+public class UserMovieRatingControllerTest {
 
 
     private MockMvc mockMvc;
