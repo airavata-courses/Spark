@@ -19,8 +19,6 @@ pipeline {
 		    	echo 'starting bash...'
 			sudo apt-get install -y nodejs
 			echo 'node js installed...'
-                        sudo apt-get install -y npm
-			echo 'npm installed'...
                         rm -r Spark
                         git clone https://github.com/airavata-courses/Spark.git
                         cd Spark/
