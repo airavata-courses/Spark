@@ -7,7 +7,10 @@ from configparser import ConfigParser
 from movie import Movie
 
 parser = ConfigParser()
-parser.read('config.ini')
+if os.path.isfile('config.ini'):
+    parser.read('config.ini')
+else:
+    return ("Config file not found"), 400
 
 app = Flask(__name__)
 
