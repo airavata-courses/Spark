@@ -26,7 +26,7 @@ pipeline {
 		        ssh ubuntu@149.165.168.227 rm -rf /home/ubuntu/Spark/
 			ssh ubuntu@149.165.168.227 mkdir -p /home/ubuntu/Spark/
 		        JENKINS_NODE_COOKIE=dontKillMe scp -r /var/lib/jenkins/workspace/rating-build-test-deploy/rating/target/rating-0.0.1-SNAPSHOT.jar ubuntu@149.165.168.227:/home/ubuntu/Spark/
-			nohup ssh ubuntu@149.165.168.227 '
+			nohup ssh -f ubuntu@149.165.168.227 '
 			sudo apt update
 			sudo apt install default-jdk -y
 			sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
