@@ -1,23 +1,25 @@
 import json
 import requests
 from flask import Flask, jsonify, request
-from flask import Flask, current_app
-# from flask_restful import reqparse, Api, Resource, abort
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
+from configparser import ConfigParser
 
 from movie import Movie
+
+parser = ConfigParser()
+parser.read('config.ini')
 
 app = Flask(__name__)
 
 # URL for the database microservices
-Db_URL = "http://localhost:8080/usermovierating"
+Db_URL = parser.get('rating','db_url')
 
 # TMDb url
-TMDb_URL = "https://api.themoviedb.org/3/"
-API_KEY = "066f82f3715ba0beb02e8a92d3f1f31f"
-NUMBER_OF_TOP_RATED_MOVIES = 3
-NUMBER_OF_TOP_LIKED_GENRE = 3
-NUMBER_OF_RECOMMENDATIONS = 10
+TMDb_URL = parser.get('tmdb','tmdb_url')
+API_KEY = parser.get('tmdb','api_key')
+NUMBER_OF_TOP_RATED_MOVIES = int(parser.get('constants','number_of_top_rated_movies'))
+NUMBER_OF_TOP_LIKED_GENRE = int(parser.get('constants','number_of_top_liked_genre'))
+NUMBER_OF_RECOMMENDATIONS = int(parser.get('constants','number_of_recommendations'))
 
 @app.route('/test', methods=['GET'])
 @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
@@ -37,6 +39,7 @@ def suggestion():
             db_url = Db_URL + "/getbyuserid"
             params = {"user_id" : user_id}
             movie_ratings = json.loads(requests.get(url=db_url, params=params).text)
+            # return jsonify(movie_ratings)
 
             # Creation of a datastructure which stores the movie id and its corresponding rating
             seen_movies = dict()
