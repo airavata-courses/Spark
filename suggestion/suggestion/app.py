@@ -2,11 +2,11 @@ import json
 import requests
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
-from configparser import ConfigParser
+from ConfigParser import SafeConfigParser
 
 from movie import Movie
 
-parser = ConfigParser()
+parser = SafeConfigParser()
 parser.read('config.ini')
 
 app = Flask(__name__)
