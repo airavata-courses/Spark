@@ -16,6 +16,7 @@ pipeline {
 			steps {
 				sh '''
                     			ssh ubuntu@149.165.157.231 '
+					 	killall -9 node
 						echo 'starting bash...'
 						sudo apt-get install -y nodejs
 						echo 'node js installed...'
