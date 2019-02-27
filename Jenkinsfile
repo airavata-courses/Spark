@@ -15,11 +15,11 @@ pipeline {
         stage('Deploy') {
 			steps {
 				sh '''
-                    JENKINS_NODE_COOKIE=dontKillMe nohup ssh ubuntu@149.165.157.231 '
+                    JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.157.231 '
 		    	echo 'starting bash...'
 			sudo apt-get install -y nodejs
 			echo 'node js installed...'
-                        rm -r Spark
+                        rm -rf Spark
                         git clone https://github.com/airavata-courses/Spark.git
                         cd Spark/
                         git checkout develop-react_UI
