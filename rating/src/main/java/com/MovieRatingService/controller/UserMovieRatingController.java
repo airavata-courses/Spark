@@ -1,10 +1,11 @@
 package com.MovieRatingService.controller;
 
+import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
+import java.net.InetAddress;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +35,26 @@ public class UserMovieRatingController implements UserMovieRatingApi {
     @Autowired
     private ZooKeeperServices zooKeeperServices;
 
+    private InetAddress ip;
+
     @PostConstruct
     public void registerService(){
-        zooKeeperServices.registerService("http://149.165.168.227:8080/");
+        try {
+            ip = InetAddress.getLocalHost();
+//            System.out.println("ip address: " + ip.getHostAddress());
+            zooKeeperServices.registerService("http://" + ip.getHostAddress() + ":8080/");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     @Override
     public ResponseEntity<String> saveUserRating(@RequestBody UserRating userRating) {
-        System.out.print("Userid : "+ userRating.getUserId());
         UserMovieRating userMovieRating = new UserMovieRating(userRating.getUserId().toString(), userRating.getMovieId(),
                 userRating.getMovieName(), userRating.getRating());
-        System.out.print("Userid : "+ userMovieRating.getUserId());
         userMovieRatingRepository.save(userMovieRating);
-
+//        System.out.println("uri for rating: " + zooKeeperServices.discoverServiceURI("rating"));
         return new ResponseEntity<>("User rating successfully saved!!", HttpStatus.OK);
     }
 
