@@ -2,7 +2,7 @@
 var connection = require('../models/db_connection')
 // Module for password encryption
 var bcrypt = require('bcryptjs');
-
+var zk     = require('../models/zk_connection');
 // API to register new user
 exports.register = function(req,res){
   var today = new Date();
@@ -23,6 +23,8 @@ exports.register = function(req,res){
   let hash = bcrypt.hashSync(req.body.password, 10);
   users["password"] = hash;
   console.log("hash is: " + hash);
+
+  zk.zkGetData(zk.client, '/services/login');
 
   connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
   if (error) {
