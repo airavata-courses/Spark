@@ -1,11 +1,12 @@
 package com.MovieRatingService.controller;
 
-import com.MovieRatingService.api.UserMovieRatingApi;
-import com.MovieRatingService.dao.UserMovieRatingRepository;
-import com.MovieRatingService.entity.UserMovieRating;
-import com.MovieRatingService.entity.UserMovieRatingId;
-import com.MovieRatingService.mapper.UserRatingMapper;
-import com.MovieRatingService.model.UserRating;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,19 +14,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import com.MovieRatingService.api.UserMovieRatingApi;
+import com.MovieRatingService.dao.UserMovieRatingRepository;
+import com.MovieRatingService.entity.UserMovieRating;
+import com.MovieRatingService.entity.UserMovieRatingId;
+import com.MovieRatingService.mapper.UserRatingMapper;
+import com.MovieRatingService.model.UserRating;
+import com.MovieRatingService.serviceDiscovery.ZooKeeperServices;
 
 @RestController
 public class UserMovieRatingController implements UserMovieRatingApi {
 
     @Autowired
     UserMovieRatingRepository userMovieRatingRepository;
+    
     @Autowired
     UserRatingMapper userRatingMapper;
 
+    @Autowired
+    private ZooKeeperServices zooKeeperServices;
+
+    @PostConstruct
+    public void registerService(){
+        zooKeeperServices.registerService("http://149.165.168.227:8080/");
+    }
+    
     @Override
     public ResponseEntity<String> saveUserRating(@RequestBody UserRating userRating) {
         System.out.print("Userid : "+ userRating.getUserId());
