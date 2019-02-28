@@ -31,7 +31,7 @@ public class SearchMovieService {
 
     @PostConstruct
     public void registerService(){
-        zooKeeperServices.registerService("http://localhost:8080/");
+        zooKeeperServices.registerService("http://149.165.170.39:8080/");
     }
 
     public MovieList searchByKeyword(@NonNull String key) {
@@ -42,6 +42,8 @@ public class SearchMovieService {
 
     public MovieList searchTopRated() {
         final String uri = env.getProperty("url.urlTopRated");
+        String s = zooKeeperServices.discoverServiceURI("search");
+        System.out.println("data :: " + s);
         return restApiCall(uri);
     }
 
