@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.net.InetAddress;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,9 +30,17 @@ public class SearchMovieService {
     @Autowired
     private ZooKeeperServices zooKeeperServices;
 
+    private InetAddress ip;
+
     @PostConstruct
     public void registerService(){
-        zooKeeperServices.registerService("http://149.165.170.39:8080/");
+        try {
+            ip = InetAddress.getLocalHost();
+            System.out.println("IP address is: " + ip.getHostAddress());
+            zooKeeperServices.registerService("http://" + ip.getHostAddress() + ":8080/");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public MovieList searchByKeyword(@NonNull String key) {
