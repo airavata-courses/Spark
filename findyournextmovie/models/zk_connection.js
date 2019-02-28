@@ -1,5 +1,5 @@
 var zookeeper = require('node-zookeeper-client');
-
+const ip = require('ip');
 var client = zookeeper.createClient('149.165.156.198:2181');
 
 // function to discover services
@@ -31,9 +31,11 @@ function zkCreateNode(client, path, data) {
 
 client.connect();
 
+console.log("ip address is: ", ip.address());
+
 client.once('connected', function () {
     console.log('Connected to the server.');
-    zkCreateNode(client, '/services/login', 'http://localhost:8080/');
+    zkCreateNode(client, '/services/login', 'http://' + ip.address() + ':8080/');
     // zkGetData(client, '/services/login');
 });
 
