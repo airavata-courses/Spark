@@ -1,16 +1,17 @@
 package com.search.service;
 
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.utils.ZKPaths;
-import org.apache.zookeeper.CreateMode;
-import org.springframework.stereotype.Service;
-import org.apache.curator.retry.RetryNTimes;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.transaction.CuratorOp;
+import org.apache.curator.retry.RetryNTimes;
+import org.apache.curator.utils.ZKPaths;
+import org.apache.zookeeper.CreateMode;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ZooKeeperServices {
@@ -42,15 +43,16 @@ public class ZooKeeperServices {
                 curatorFramework.create().creatingParentsIfNeeded().forPath(znode);
             }
 
-            String znodePath = curatorFramework
+            CuratorOp znodePath = curatorFramework.transactionOp()
                     .create()
                     .withMode(CreateMode.EPHEMERAL_SEQUENTIAL)
                     .forPath(znode+"/_", uri.getBytes());
-
-            uriToZnodePath.put(uri, znodePath);
+            String result = curatorFramework.transaction().forOperations(znodePath).get(0).toString();
+            uriToZnodePath.put(uri, result);
         } catch (Exception ex) {
+        	ex.printStackTrace();
             throw new RuntimeException("Could not register service search\""
-                    + "\", with URI \"" + uri + "\": " + ex.getLocalizedMessage());
+                    + "\", with URI \"" + uri + "\": ");
         }
     }
 
