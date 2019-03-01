@@ -11,8 +11,8 @@ import socket
 from movie import Movie
 
 parser = ConfigParser()
-if os.path.isfile('./config.ini'):
-    parser.read('./config.ini')
+if os.path.isfile('Spark/suggestion/suggestion/config.ini'):
+    parser.read('Spark/suggestion/suggestion/config.ini')
 else:
     print("error finding the config file")
     exit()
