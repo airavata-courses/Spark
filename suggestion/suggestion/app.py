@@ -36,12 +36,18 @@ def suggestion():
             return "User Id cannot be blank", 400
         try:
             db_url = discover_rating()
+            print(db_url)
             if db_url is None:
                 return "Unable to discover rating service in zookeeper", 400
-            db_url = db_url + "/getbyuserid"
-            params = {"user_id" : user_id}
-            movie_ratings = json.loads(requests.get(url=db_url, params=params).text)
-
+            db_url = db_url + "/usermovierating/getbyuserid"
+            params = {"user_id": user_id}
+            print(db_url)
+            print(user_id)
+            resp = requests.get(url=db_url, params=params)
+            if resp.status_code != requests.codes.ok:
+                return 'Rating api did not reurn valid response', 404
+            movie_ratings = json.loads(resp.text)
+            # print(movie_ratings)
             # Creation of a data structure which stores the movie id and its corresponding rating
             seen_movies = dict()
             for x in movie_ratings:
@@ -50,14 +56,14 @@ def suggestion():
             # If no movie has been rated by the user, show the popular movies
             if len(seen_movies.keys()) == 0:
                 recommendation_url = TMDb_URL + "movie/popular"
-                params = {'api_key':API_KEY, 'language': 'en-US', 'page' : 1}
+                params = {'api_key':API_KEY, 'language': 'en-US', 'page':1}
                 response = requests.get(url = recommendation_url, params = params)
                 if response.status_code == requests.codes.ok:
                     suggestions = list(json.loads(response.text)['results'])
                     recommended_movies = sorted(suggestions, key=lambda k:k['popularity'],
                                                 reverse=True)[:NUMBER_OF_RECOMMENDATIONS]
                 else:
-                    return 'TMDb api not working', 400
+                    return 'TMDb api not working', 404
 
             else:
                 if len(seen_movies.keys()) <= 3:
@@ -117,8 +123,8 @@ def discover_rating():
         zookeeper_url = SERVICE_REGISTRY_URL + "/discover"
         params = {"name": "rating"}
         uri = requests.get(url=zookeeper_url, params=params)
-        print(uri.text)
-        return uri
+        # print(uri.text)
+        return uri.text
     except:
         return None
 
