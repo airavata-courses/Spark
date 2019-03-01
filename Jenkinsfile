@@ -36,7 +36,7 @@ pipeline {
                 '
               '''
 
-                sh 'ssh ubuntu@$LOCAL_LOGIN_IP npm start --prefix Spark/findyournextmovie -- --LOGIN_IP=$LOCAL_LOGIN_IP'
+                sh 'ssh -f ubuntu@$LOCAL_LOGIN_IP npm start --prefix Spark/findyournextmovie -- --LOGIN_IP=$LOCAL_LOGIN_IP'
             }
         }
        }
