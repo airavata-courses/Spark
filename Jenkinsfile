@@ -1,7 +1,7 @@
 pipeline {
     agent any
 	environment {
-		LOCAL_SEARCH_IP = ${env.SEARCH_IP}
+		LOCAL_SEARCH_IP = "${env.SEARCH_IP}"
 	}
     stages {
         stage('install dependencies') {
