@@ -1,19 +1,26 @@
 package com.MovieRatingService.controller;
 
-import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.net.InetAddress;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.MovieRatingService.api.UserMovieRatingApi;
 import com.MovieRatingService.dao.UserMovieRatingRepository;
@@ -21,8 +28,8 @@ import com.MovieRatingService.entity.UserMovieRating;
 import com.MovieRatingService.entity.UserMovieRatingId;
 import com.MovieRatingService.mapper.UserRatingMapper;
 import com.MovieRatingService.model.UserRating;
-import com.MovieRatingService.serviceDiscovery.ZooKeeperServices;
 
+@CrossOrigin
 @RestController
 public class UserMovieRatingController implements UserMovieRatingApi {
 
@@ -32,18 +39,19 @@ public class UserMovieRatingController implements UserMovieRatingApi {
     @Autowired
     UserRatingMapper userRatingMapper;
 
-    @Autowired
-    private ZooKeeperServices zooKeeperServices;
-
-    private InetAddress ip;
-
     @PostConstruct
     public void registerService(){
         try {
-            ip = InetAddress.getLocalHost();
-//            System.out.println("ip address: " + ip.getHostAddress());
-            zooKeeperServices.registerService("http://" + ip.getHostAddress() + ":8080/");
-
+        	InetAddress ip = InetAddress.getLocalHost();
+            final String uri = "http://149.165.169.102:5000/services/register";
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            params.add("name", "rating");
+            params.add("uri", "http://" + ip.getHostAddress()+":8081");
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.postForEntity(uri, request, Void.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
