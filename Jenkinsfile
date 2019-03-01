@@ -31,7 +31,7 @@ pipeline {
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP mkdir -p /home/ubuntu/Spark/'
 			sh 'scp -r /var/lib/jenkins/workspace/search-build-test-deploy/search/target/search-0.0.1-SNAPSHOT.jar ubuntu@$LOCAL_SEARCH_IP:/home/ubuntu/Spark/'
                 	sh 'ssh ubuntu@$LOCAL_SEARCH_IP killall -9 java'
-			sh 'ssh -f ubuntu@$LOCAL_SEARCH_IP java -jar /home/ubuntu/Spark/search-0.0.1-SNAPSHOT.jar'
+			sh 'ssh -f ubuntu@$LOCAL_SEARCH_IP java -jar /home/ubuntu/Spark/search-0.0.1-SNAPSHOT.jar -DSEARCH_IP=$LOCAL_SEARCH_IP'
 		} 	
     }
 }
