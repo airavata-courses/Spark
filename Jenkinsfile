@@ -23,10 +23,8 @@ pipeline {
 						sudo apt-get install python3-pip -y
 						pip3 install -r requirements.txt
 				        	'
-						ssh -f ubuntu@$LOCAL_SUGGEST_IP '
-						cd Spark/suggestion/suggestion
-						python3 app.py -ip $LOCAL_SUGGEST_IP
-					       '
+						ssh -f ubuntu@$LOCAL_SUGGEST_IP python3 Spark/suggestion/suggestion/app.py -ip $LOCAL_SUGGEST_IP
+					       
 				'''
 			}
 		}
