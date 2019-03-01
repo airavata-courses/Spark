@@ -39,7 +39,7 @@ pipeline {
               sh '''
                 JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@$LOCAL_LOGIN_IP '
                     cd Spark/findyournextmovie
-                    npm start
+                    npm start -- --LOGIN_IP=$LOCAL_LOGIN_IP
                 '
               '''
             }
