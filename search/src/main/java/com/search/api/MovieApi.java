@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface MovieApi {
 
     @GetMapping(path="/details")
-    public MovieDetails getMovieDetails(@RequestParam(name="movieId") int movieId); 
+    public MovieDetails getMovieDetails(@RequestParam(name="movieId") int movieId);
 }
