@@ -1,39 +1,68 @@
 package com.MovieRatingService.controller;
 
+import java.net.InetAddress;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
 import com.MovieRatingService.api.UserMovieRatingApi;
 import com.MovieRatingService.dao.UserMovieRatingRepository;
 import com.MovieRatingService.entity.UserMovieRating;
 import com.MovieRatingService.entity.UserMovieRatingId;
 import com.MovieRatingService.mapper.UserRatingMapper;
 import com.MovieRatingService.model.UserRating;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+@CrossOrigin
 @RestController
 public class UserMovieRatingController implements UserMovieRatingApi {
 
     @Autowired
     UserMovieRatingRepository userMovieRatingRepository;
+    
     @Autowired
     UserRatingMapper userRatingMapper;
 
+    @PostConstruct
+    public void registerService(){
+        try {
+        	InetAddress ip = InetAddress.getLocalHost();
+            final String uri = "http://149.165.169.102:5000/services/register";
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            params.add("name", "rating");
+            params.add("uri", "http://" + ip.getHostAddress()+":8081");
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.postForEntity(uri, request, Void.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     @Override
     public ResponseEntity<String> saveUserRating(@RequestBody UserRating userRating) {
-        System.out.print("Userid : "+ userRating.getUserId());
         UserMovieRating userMovieRating = new UserMovieRating(userRating.getUserId().toString(), userRating.getMovieId(),
                 userRating.getMovieName(), userRating.getRating());
-        System.out.print("Userid : "+ userMovieRating.getUserId());
         userMovieRatingRepository.save(userMovieRating);
-
+//        System.out.println("uri for rating: " + zooKeeperServices.discoverServiceURI("rating"));
         return new ResponseEntity<>("User rating successfully saved!!", HttpStatus.OK);
     }
 
