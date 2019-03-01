@@ -16,7 +16,7 @@
 *.iml
 *.ipr
 *.metadata*
-*.recommenders*
+.recommenders*
 
 ### NetBeans ###
 /nbproject/private/
