@@ -1,5 +1,8 @@
 pipeline {
     agent any
+	environment {
+		LOCAL_SEARCH_IP = ${env.SEARCH_IP}
+	}
     stages {
         stage('install dependencies') {
             steps {
@@ -20,8 +23,8 @@ pipeline {
     post {
         success{
                    	archiveArtifacts artifacts: 'search/target/search-0.0.1-SNAPSHOT.jar'
-			echo env.SEARCH_IP
-		        sh 'ssh ubuntu@${env.SEARCH_IP} sudo apt update'
+			echo $LOCAL_SEARCH_IP
+		        sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo apt update'
 			sh 'ssh ubuntu@149.165.170.39 sudo apt install default-jdk -y'
 			sh 'ssh ubuntu@149.165.170.39 rm -rf /home/ubuntu/Spark/'
 			sh 'ssh ubuntu@149.165.170.39 mkdir -p /home/ubuntu/Spark/'
