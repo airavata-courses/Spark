@@ -4,7 +4,6 @@ import requests
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from configparser import ConfigParser
-from kazoo.client import KazooClient
 import socket
 
 from movie import Movie
@@ -13,17 +12,13 @@ parser = ConfigParser()
 if os.path.isfile('./config.ini'):
     parser.read('./config.ini')
 else:
-    # print("error finding the config file")
+    print("error finding the config file")
     exit()
 
 app = Flask(__name__)
 
-# Zookeeper host and port
-z_host = str(parser.get('zookeeper','host'))
-z_port = str(parser.get('zookeeper','port'))
-
-# URL for the database microservices
-Db_URL = parser.get('rating','db_url')
+# Service registry
+SERVICE_REGISTRY_URL = parser.get('rating', 'zookeeper_url')
 
 # TMDb url
 TMDb_URL = parser.get('tmdb','tmdb_url')
@@ -31,13 +26,6 @@ API_KEY = parser.get('tmdb','api_key')
 NUMBER_OF_TOP_RATED_MOVIES = int(parser.get('constants','number_of_top_rated_movies'))
 NUMBER_OF_TOP_LIKED_GENRE = int(parser.get('constants','number_of_top_liked_genre'))
 NUMBER_OF_RECOMMENDATIONS = int(parser.get('constants','number_of_recommendations'))
-
-@app.route('/test', methods=['GET'])
-@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
-def my_test():
-    response = requests.get('http://test.com')
-    print(response.json())
-    return jsonify(response.json())
 
 @app.route('/suggestion', methods=['GET'])
 @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
@@ -47,7 +35,10 @@ def suggestion():
         if user_id is None:
             return "User Id cannot be blank", 400
         try:
-            db_url = Db_URL + "/getbyuserid"
+            db_url = discover_rating()
+            if db_url is None:
+                return "Unable to discover rating service in zookeeper", 400
+            db_url = db_url + "/getbyuserid"
             params = {"user_id" : user_id}
             movie_ratings = json.loads(requests.get(url=db_url, params=params).text)
 
@@ -106,30 +97,40 @@ def suggestion():
             return jsonify(str(e)), 400
 
 
-def registerSuggestionService():
-    hostname = socket.gethostname()
-    uri = 'http://' + str(socket.gethostbyname(hostname)) + ":5000"
-    service_path = "services/suggestion"
+# Below method registers the suggestion service on Zookeeper using the servicergistry service
+def register_suggestion():
     try:
-        zk1 = KazooClient(hosts=z_host+':'+z_port)
-        zk1.start()
-        if zk1.exists(service_path):
-            return True
-        else:
-            zk1.ensure_path(service_path)
-        zk1.set(service_path, uri.encode('utf-8'))
-        zk1.stop()
+        hostname = socket.gethostname()
+        uri = 'http://' + str(socket.gethostbyname(hostname)) + ":5000"
+        service_registry_url = SERVICE_REGISTRY_URL + "/register"
+        params = {"name": "suggestion", "uri": uri}
+        requests.post(url=service_registry_url, params=params)
         return True
     except Exception as e:
+        print(str(e))
         return False
 
 
+# Below method gets the uri corresponding to rating uri by using the serviceregistry service
+def discover_rating():
+    try:
+        zookeeper_url = SERVICE_REGISTRY_URL + "/discover"
+        params = {"name": "rating"}
+        uri = requests.get(url=zookeeper_url, params=params)
+        print(uri.text)
+        return uri
+    except:
+        return None
+
+
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
-    if registerSuggestionService():
-        print("suggestion service registered")
+    if register_suggestion():
+        print("Suggestion service registered")
     else:
-        print("suggestion service unable to register")
+        print("Suggestion service unable to register")
+
+    app.run(debug=True, host='0.0.0.0', use_reloader=False)
+
 
 
 
