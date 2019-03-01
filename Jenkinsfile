@@ -24,6 +24,7 @@ pipeline {
         success{
                    	archiveArtifacts artifacts: 'search/target/search-0.0.1-SNAPSHOT.jar'
 			echo env.LOCAL_SEARCH_IP
+			sh 'ssh ubuntu@$LOCAL_SEARCH_IP export SEARCH_IP=$LOCAL_SEARCH_IP' 
 		        sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo apt update'
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo apt install default-jdk -y'
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP rm -rf /home/ubuntu/Spark/'
