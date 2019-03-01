@@ -21,7 +21,7 @@ pipeline {
         success{
                    	archiveArtifacts artifacts: 'search/target/search-0.0.1-SNAPSHOT.jar'
 			echo env.SEARCH_IP
-			sh 'ssh ubuntu@149.165.170.39 sudo apt update'
+		        sh 'ssh ubuntu@${env.SEARCH_IP} sudo apt update'
 			sh 'ssh ubuntu@149.165.170.39 sudo apt install default-jdk -y'
 			sh 'ssh ubuntu@149.165.170.39 rm -rf /home/ubuntu/Spark/'
 			sh 'ssh ubuntu@149.165.170.39 mkdir -p /home/ubuntu/Spark/'
