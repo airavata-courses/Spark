@@ -23,7 +23,7 @@ pipeline {
 						sudo apt-get install python3-pip -y
 						pip3 install -r requirements.txt
 				        	'
-						ssh -f ubuntu@$LOCAL_SUGGEST_IP python3 Spark/suggestion/suggestion/app.py -ip $LOCAL_SUGGEST_IP
+					JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@$LOCAL_SUGGEST_IP python3 Spark/suggestion/suggestion/app.py -ip $LOCAL_SUGGEST_IP
 					       
 				'''
 			}
