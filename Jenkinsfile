@@ -13,7 +13,7 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				sh '''
-					JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@$LOCAL_SUGGEST_IP '
+					JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_SUGGEST_IP '
 						killall -9 python3
 						rm -r Spark
 						git clone https://github.com/airavata-courses/Spark.git
@@ -22,9 +22,11 @@ pipeline {
 						cd suggestion
 						sudo apt-get install python3-pip -y
 						pip3 install -r requirements.txt
-						cd suggestion/
+				        	'
+						ssh -f ubuntu@$LOCAL_SUGGEST_IP '
+						cd Spark/suggestion/suggestion
 						python3 app.py -ip $LOCAL_SUGGEST_IP
-					'
+					       '
 				'''
 			}
 		}
