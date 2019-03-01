@@ -1,6 +1,9 @@
 pipeline {
     agent any
-
+    
+    	environment {
+            LOCAL_LOGIN_IP = "${env.LOGIN_IP}"
+        }
     stages {
         stage('Build') {
             steps {
@@ -11,8 +14,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+                echo env.LOCAL_LOGIN_IP
               sh '''
-                ssh ubuntu@149.165.170.119 '
+                ssh ubuntu@$LOCAL_LOGIN_IP '
                     killall -9 node
                     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
                     sudo apt-get install -y nodejs
@@ -33,7 +37,7 @@ pipeline {
               '''
                
               sh '''
-                JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.170.119 '
+                JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@LOCAL_LOGIN_IP '
                     cd Spark/findyournextmovie
                     npm start
                 '
