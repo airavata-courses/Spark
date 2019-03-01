@@ -52,7 +52,7 @@ public class UserMovieRatingController implements UserMovieRatingApi {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             params.add("name", "rating");
-            params.add("uri", "http://" + env.getProperty("RATING_IP") +":8081");
+            params.add("uri", "http://" + env.getProperty("RATING_IP") +":8080");
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForEntity(uri, request, Void.class);
