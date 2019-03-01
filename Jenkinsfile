@@ -1,5 +1,8 @@
 pipeline {
     agent any
+	environment {
+		LOCAL_RATING_IP = "${env.RATING_IP}"
+	}
     stages {
         stage('install dependencies') {
             steps {
@@ -23,7 +26,7 @@ pipeline {
         success{
 		    archiveArtifacts artifacts: 'rating/target/rating-0.0.1-SNAPSHOT.jar'
 		    sh '''
-		        ssh ubuntu@149.165.168.227 rm -rf /home/ubuntu/Spark/
+		        ssh ubuntu@$LOCAL_RATING_IP rm -rf /home/ubuntu/Spark/
 			ssh ubuntu@149.165.168.227 mkdir -p /home/ubuntu/Spark/
 		        JENKINS_NODE_COOKIE=dontKillMe scp -r /var/lib/jenkins/workspace/rating-build-test-deploy/rating/target/rating-0.0.1-SNAPSHOT.jar ubuntu@149.165.168.227:/home/ubuntu/Spark/
 			nohup ssh -f ubuntu@149.165.168.227 '
