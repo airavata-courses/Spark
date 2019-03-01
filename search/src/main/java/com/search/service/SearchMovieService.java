@@ -1,19 +1,26 @@
 package com.search.service;
 
+import java.net.InetAddress;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
 import com.search.mapper.MovieListMapper;
 import com.search.models.MovieList;
 import com.search.models.Movies;
 import com.search.models.SearchMovieList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.PostConstruct;
-import java.net.InetAddress;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SearchMovieService {
@@ -27,17 +34,19 @@ public class SearchMovieService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private ZooKeeperServices zooKeeperServices;
-
-    private InetAddress ip;
-
     @PostConstruct
     public void registerService(){
         try {
-            ip = InetAddress.getLocalHost();
-            System.out.println("IP address is: " + ip.getHostAddress());
-            zooKeeperServices.registerService("http://" + ip.getHostAddress() + ":8080/");
+        	InetAddress ip = InetAddress.getLocalHost();
+            final String uri = "http://149.165.169.102:5000/services/register";
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            params.add("name", "search");
+            params.add("uri", "http://" + ip.getHostAddress()+":8080");
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.postForEntity(uri, request, Void.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,8 +60,6 @@ public class SearchMovieService {
 
     public MovieList searchTopRated() {
         final String uri = env.getProperty("url.urlTopRated");
-        String s = zooKeeperServices.discoverServiceURI("search");
-        System.out.println("data :: " + s);
         return restApiCall(uri);
     }
 
