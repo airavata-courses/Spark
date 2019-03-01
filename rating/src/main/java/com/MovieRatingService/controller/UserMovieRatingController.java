@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,9 @@ public class UserMovieRatingController implements UserMovieRatingApi {
     @Autowired
     UserRatingMapper userRatingMapper;
 
+    @Autowired
+    Environment env;
+
     @PostConstruct
     public void registerService(){
         try {
@@ -48,7 +52,7 @@ public class UserMovieRatingController implements UserMovieRatingApi {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             params.add("name", "rating");
-            params.add("uri", "http://" + ip.getHostAddress()+":8081");
+            params.add("uri", "http://" + env.getProperty("RATING_IP") +":8081");
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForEntity(uri, request, Void.class);
