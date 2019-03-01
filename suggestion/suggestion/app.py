@@ -36,18 +36,15 @@ def suggestion():
             return "User Id cannot be blank", 400
         try:
             db_url = discover_rating()
-            print(db_url)
             if db_url is None:
                 return "Unable to discover rating service in zookeeper", 400
             db_url = db_url + "/usermovierating/getbyuserid"
             params = {"user_id": user_id}
-            print(db_url)
-            print(user_id)
             resp = requests.get(url=db_url, params=params)
             if resp.status_code != requests.codes.ok:
                 return 'Rating api did not reurn valid response', 404
             movie_ratings = json.loads(resp.text)
-            # print(movie_ratings)
+
             # Creation of a data structure which stores the movie id and its corresponding rating
             seen_movies = dict()
             for x in movie_ratings:
@@ -123,7 +120,6 @@ def discover_rating():
         zookeeper_url = SERVICE_REGISTRY_URL + "/discover"
         params = {"name": "rating"}
         uri = requests.get(url=zookeeper_url, params=params)
-        # print(uri.text)
         return uri.text
     except:
         return None
