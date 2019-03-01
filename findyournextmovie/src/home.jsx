@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import MovieDetails from './MovieDetails';
 import NonEditableStarRating from './NonEditableStarRating';
 import Alert from "react-s-alert";
+import {getAllServices} from "./ApiUtil";
 
 const styles = theme => ({
   icon: {
@@ -78,11 +79,22 @@ class Home extends Component{
   }
 
   componentWillMount() {
+    getAllServices().then(res => {
+      Object.keys(res).forEach(function(key) {
+        console.log(key + " " + res[key]);
+        localStorage.setItem(key, res[key]);
+      });
+    }).catch(error => {
+      Alert.error("Sorry! Some error occurred in fetching URI.");
+    });
+
     this.setState({
       isAuthenticated: localStorage.getItem("isAuthenticated"),
       userId: localStorage.getItem("ACCESS_TOKEN"),
     });
-    axios.get('http://149.165.170.39:8080/search/toprated' )
+    console.log(localStorage.getItem("ACCESS_TOKEN"));
+
+    axios.get(localStorage.getItem("search")+'/search/toprated' )
         .then(res => {
           this.setState({
             movieDetails: res.data.movies,
@@ -94,7 +106,7 @@ class Home extends Component{
     }
 
   requestSearch(){
-      axios.get('http://149.165.170.39:8080/search/keyword?keyword=' +  this.state.searchText)
+      axios.get(localStorage.getItem("search")+'/search/keyword?keyword=' +  this.state.searchText)
           .then(res => {
             this.setState({
               movieDetails: res.data.movies,
@@ -115,7 +127,7 @@ class Home extends Component{
       this.props.history.push('\login');
     }else if(localStorage.getItem('isAuthenticated') == "true"){
       console.log(localStorage.getItem('ACCESS_TOKEN'));
-      axios.get('http://149.165.156.78:5000/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
+      axios.get(localStorage.getItem("suggestion")+'/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
           .then(res => {
             this.setState({
               movieDetails: res.data.movies,
