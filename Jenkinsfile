@@ -14,7 +14,7 @@ pipeline {
 			steps {
 				sh '''
 					JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_SUGGEST_IP '
-						killall -9 python3
+						killall -9 python3 || true
 						rm -r Spark
 						git clone https://github.com/airavata-courses/Spark.git
 						cd Spark
