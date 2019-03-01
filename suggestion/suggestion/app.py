@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from configparser import ConfigParser
 from argparse import ArgumentParser
+
 import socket
 
 from movie import Movie
