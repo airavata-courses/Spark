@@ -31,7 +31,7 @@ pipeline {
                     npm install
                 '
               '''
-               
+
               sh '''
                 JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.170.119 '
                     cd Spark/findyournextmovie
