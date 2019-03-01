@@ -2,7 +2,8 @@
 var connection = require('../models/db_connection')
 // Module for password encryption
 var bcrypt = require('bcryptjs');
-
+var zk     = require('../models/registerService');
+zk.register();
 // API to register new user
 exports.register = function(req,res){
   var today = new Date();
@@ -23,6 +24,8 @@ exports.register = function(req,res){
   let hash = bcrypt.hashSync(req.body.password, 10);
   users["password"] = hash;
   console.log("hash is: " + hash);
+
+
 
   connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
   if (error) {
