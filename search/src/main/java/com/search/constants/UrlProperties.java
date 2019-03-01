@@ -8,6 +8,15 @@ public class UrlProperties {
     private String url_getById;
     private String applicationKey;
     private String urlTopRated;
+    private String SEARCH_IP;
+
+    public String getSEARCH_IP() {
+        return SEARCH_IP;
+    }
+
+    public void setSEARCH_IP(String SEARCH_IP) {
+        this.SEARCH_IP = SEARCH_IP;
+    }
 
     public String getUrl_searchBykeyword() {
         return url_searchBykeyword;
