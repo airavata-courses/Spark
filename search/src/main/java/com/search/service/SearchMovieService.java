@@ -37,13 +37,15 @@ public class SearchMovieService {
     @PostConstruct
     public void registerService(){
         try {
+            System.out.println("Hi in  registry");
         	InetAddress ip = InetAddress.getLocalHost();
             final String uri = "http://149.165.169.102:5000/services/register";
             MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             params.add("name", "search");
-            params.add("uri", "http://" + env.getProperty("SEARCH_IP") +":8080");
+            params.add("uri", "http://" + System.getProperty("SEARCH_IP") +":8080");
+            System.out.println("system property:" + System.getProperty("SEARCH_IP"));
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForEntity(uri, request, Void.class);
