@@ -4,6 +4,8 @@ import requests
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from configparser import ConfigParser
+from argparse import ArgumentParser
+
 import socket
 
 from movie import Movie
@@ -16,6 +18,9 @@ else:
     exit()
 
 app = Flask(__name__)
+
+# Default suggest server ip
+SELF_SERVER_IP = parser.get('constants','self_server_ip')
 
 # Service registry
 SERVICE_REGISTRY_URL = parser.get('rating', 'zookeeper_url')
@@ -103,8 +108,12 @@ def suggestion():
 # Below method registers the suggestion service on Zookeeper using the servicergistry service
 def register_suggestion():
     try:
-        hostname = socket.gethostname()
-        uri = 'http://' + str(socket.gethostbyname(hostname)) + ":5000"
+        argparser = ArgumentParser()
+        argparser.add_argument("-ip", "--ipaddr",
+                            action="store", dest="suggest_ip", default=SELF_SERVER_IP,
+                            help="floating ip of the machine on which suggest microservice is running")
+        args = argparser.parse_args()
+        uri = 'http://' + str(args.suggest_ip) + ":5000"
         service_registry_url = SERVICE_REGISTRY_URL + "/register"
         params = {"name": "suggestion", "uri": uri}
         requests.post(url=service_registry_url, params=params)
