@@ -80,6 +80,7 @@ class MovieDetails extends Component {
           });
         }).catch(error => {
           Alert.error("Sorry! Some error occurred.");
+          //jenkins test build
         });
     }
 
