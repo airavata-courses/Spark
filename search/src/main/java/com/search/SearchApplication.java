@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 public class SearchApplication {
 
 	public static void main(String[] args) {
-
+		//Jenkins test build
 		SpringApplication.run(SearchApplication.class, args);
 	}
 
