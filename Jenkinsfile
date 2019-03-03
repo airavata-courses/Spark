@@ -25,7 +25,7 @@ pipeline {
 			sh 'ssh ubuntu@149.165.169.102 rm -rf /home/ubuntu/Spark/'
 			sh 'ssh ubuntu@149.165.169.102 mkdir -p /home/ubuntu/Spark/'
 			sh 'scp -r /var/lib/jenkins/workspace/serviceRegistry-build-test-deploy/serviceRegistry/target/serviceRegistry-0.0.1-SNAPSHOT.jar ubuntu@149.165.169.102:/home/ubuntu/Spark/'
-                	sh 'ssh ubuntu@149.165.169.102 killall -9 java'
+                	sh 'ssh ubuntu@149.165.169.102 killall -9 java || true'
 			sh 'ssh -f ubuntu@149.165.169.102 java -jar /home/ubuntu/Spark/serviceRegistry-0.0.1-SNAPSHOT.jar'
 		}
     }
