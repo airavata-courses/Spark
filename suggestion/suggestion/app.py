@@ -9,7 +9,7 @@ from argparse import ArgumentParser
 import socket
 
 from movie import Movie
-
+#Jenkins test build
 parser = ConfigParser()
 if os.path.isfile('Spark/suggestion/suggestion/config.ini'):
     parser.read('Spark/suggestion/suggestion/config.ini')
