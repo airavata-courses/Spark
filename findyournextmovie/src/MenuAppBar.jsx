@@ -48,7 +48,6 @@ class MenuAppBar extends React.Component {
   };
 
   logout(){
-    console.log('in log out');
     localStorage.setItem('isAuthenticated', false);
     localStorage.setItem('ACCESS_TOKEN', "");
     if(localStorage.getItem('isAuthenticated') == "false")
