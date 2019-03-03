@@ -10,3 +10,6 @@ https://github.com/airavata-courses/Spark/wiki/Findyournextmovie
 
 Assignment 1 wiki:  
 https://github.com/airavata-courses/Spark/wiki/Assignment-1
+
+Assignment 2 wiki:  
+https://github.com/airavata-courses/Spark/wiki/Assignment-2
