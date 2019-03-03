@@ -17,7 +17,7 @@ pipeline {
                 echo env.LOCAL_LOGIN_IP
               sh '''
                 ssh ubuntu@$LOCAL_LOGIN_IP '
-                    killall -9 node
+                    killall -9 node || true
                     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
                     sudo apt-get install -y nodejs
                     sudo apt-get install -y npm
@@ -36,7 +36,7 @@ pipeline {
                 '
               '''
 
-                sh 'ssh -f ubuntu@$LOCAL_LOGIN_IP npm start --prefix Spark/findyournextmovie -- --LOGIN_IP=$LOCAL_LOGIN_IP'
+                sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@$LOCAL_LOGIN_IP npm start --prefix Spark/findyournextmovie -- --LOGIN_IP=$LOCAL_LOGIN_IP'
             }
         }
        }
