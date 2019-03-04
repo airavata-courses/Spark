@@ -44,7 +44,7 @@ public class SearchMovieService {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             params.add("name", "search");
-            params.add("uri", "http://" + System.getProperty("SEARCH_IP") +":8080");
+            params.add("uri", "http://" + env.getProperty("SEARCH_IP") +":8080");
             System.out.println("system property:" + System.getProperty("SEARCH_IP"));
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
             RestTemplate restTemplate = new RestTemplate();
