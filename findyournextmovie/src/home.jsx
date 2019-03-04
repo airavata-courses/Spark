@@ -81,7 +81,6 @@ class Home extends Component{
   componentWillMount() {
     getAllServices().then(res => {
       Object.keys(res).forEach(function(key) {
-        console.log(key + " " + res[key]);
         localStorage.setItem(key, res[key]);
       });
     }).catch(error => {
@@ -92,7 +91,6 @@ class Home extends Component{
       isAuthenticated: localStorage.getItem("isAuthenticated"),
       userId: localStorage.getItem("ACCESS_TOKEN"),
     });
-    console.log(localStorage.getItem("ACCESS_TOKEN"));
 
     axios.get(localStorage.getItem("search")+'/search/toprated' )
         .then(res => {
@@ -106,14 +104,19 @@ class Home extends Component{
     }
 
   requestSearch(){
-      axios.get(localStorage.getItem("search")+'/search/keyword?keyword=' +  this.state.searchText)
-          .then(res => {
-            this.setState({
-              movieDetails: res.data.movies,
+
+    if(this.state.searchText == '' || this.state.searchText == ' ' || this.state.searchText == null)
+      Alert.error("Please enter a valid movie name.");
+    else{
+        axios.get(localStorage.getItem("search")+'/search/keyword?keyword=' +  this.state.searchText)
+            .then(res => {
+              this.setState({
+                movieDetails: res.data.movies,
+              });
+            }).catch(error => {
+              Alert.error("Sorry! Some error occurred.");
             });
-          }).catch(error => {
-            Alert.error("Sorry! Some error occurred.");
-          });
+        }
     }
 
   handleChange(event){
@@ -126,7 +129,6 @@ class Home extends Component{
     if (localStorage.getItem("isAuthenticated") === null) {
       this.props.history.push('\login');
     }else if(localStorage.getItem('isAuthenticated') == "true"){
-      console.log(localStorage.getItem('ACCESS_TOKEN'));
       axios.get(localStorage.getItem("suggestion")+'/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
           .then(res => {
             this.setState({
