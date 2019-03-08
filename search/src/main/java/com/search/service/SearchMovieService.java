@@ -1,11 +1,12 @@
 package com.search.service;
 
-import java.net.InetAddress;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.search.constants.UrlProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -34,17 +35,20 @@ public class SearchMovieService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private UrlProperties properties;
+
     @PostConstruct
     public void registerService(){
         try {
-            System.out.println("Hi in  registry");
-        	InetAddress ip = InetAddress.getLocalHost();
+            String search = properties.getSEARCH_IP();
+            System.out.println("new IP" + search);
             final String uri = "http://149.165.169.102:5000/services/register";
             MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             params.add("name", "search");
-            params.add("uri", "http://" + env.getProperty("SEARCH_IP") +":8080");
+            params.add("uri", "http://" + search +":8080");
             System.out.println("system property:" + System.getProperty("SEARCH_IP"));
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
             RestTemplate restTemplate = new RestTemplate();
