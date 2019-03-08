@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.MovieRatingService.config.IpProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -43,16 +44,20 @@ public class UserMovieRatingController implements UserMovieRatingApi {
     @Autowired
     Environment env;
 
+    @Autowired
+    IpProperties ipProperties;
+
     @PostConstruct
     public void registerService(){
         try {
-        	InetAddress ip = InetAddress.getLocalHost();
+            String rating = ipProperties.getRATING_IP();
+            System.out.println("rating ip " + rating);
             final String uri = "http://149.165.169.102:5000/services/register";
             MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             params.add("name", "rating");
-            params.add("uri", "http://" + env.getProperty("RATING_IP") +":8080");
+            params.add("uri", "http://" + rating +":8080");
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(params, headers);
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForEntity(uri, request, Void.class);
