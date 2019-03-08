@@ -5,14 +5,15 @@ from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from configparser import ConfigParser
 from argparse import ArgumentParser
-
+from kafka import KafkaConsumer
+import threading
 import socket
 
 from movie import Movie
 #Jenkins test build
 parser = ConfigParser()
-if os.path.isfile('Spark/suggestion/suggestion/config.ini'):
-    parser.read('Spark/suggestion/suggestion/config.ini')
+if os.path.isfile('./config.ini'):
+    parser.read('./config.ini')
 else:
     print("error finding the config file")
     exit()
@@ -31,6 +32,8 @@ API_KEY = parser.get('tmdb','api_key')
 NUMBER_OF_TOP_RATED_MOVIES = int(parser.get('constants','number_of_top_rated_movies'))
 NUMBER_OF_TOP_LIKED_GENRE = int(parser.get('constants','number_of_top_liked_genre'))
 NUMBER_OF_RECOMMENDATIONS = int(parser.get('constants','number_of_recommendations'))
+BOOTSTRAP_SERVERS = parser.get('Kafka', 'bootstrap_servers')
+
 
 @app.route('/suggestion', methods=['GET'])
 @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
@@ -133,6 +136,24 @@ def discover_rating():
     except:
         return None
 
+def register_kafka_listener(topic):
+# Poll kafka
+    def poll():
+        # Initialize consumer Instance
+        consumer = KafkaConsumer(topic, bootstrap_servers=BOOTSTRAP_SERVERS)
+
+        print("About to start polling for topic:", topic)
+        consumer.poll(timeout_ms=6000)
+        print("Started Polling for topic:", topic)
+        for msg in consumer:
+            record = json.loads(msg.value)
+            print (record)
+            # print("Entered the loop\nKey: ",msg.key," Value:", msg.value)
+            # kafka_listener(msg)
+    print("About to register listener to topic:", topic)
+    t1 = threading.Thread(target=poll)
+    t1.start()
+    print("started a background thread")
 
 if __name__ == "__main__":
     if register_suggestion():
@@ -140,6 +161,20 @@ if __name__ == "__main__":
     else:
         print("Suggestion service unable to register")
 
+    # consumer = KafkaConsumer(bootstrap_servers='localhost:9092')
+    # consumer.subscribe(topics=['userMovieRating.t'])
+    #
+    # try:
+    #     # this method should auto-commit offsets as you consume them.
+    #     # If it doesn't, turn on logging.DEBUG to see why it gets turned off.
+    #     # Not assigning a group_id can be one cause
+    #     for msg in consumer:
+    #         record = json.loads(msg.value)
+    #         print (record)
+    # finally:
+    #     # Always close your producers/consumers when you're done
+    #     consumer.close()
+    register_kafka_listener('userMovieRating.t')
     app.run(debug=True, host='0.0.0.0', use_reloader=False)
 
 

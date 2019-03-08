@@ -3,3 +3,4 @@ requests==2.21.0
 Flask==1.0.2
 Flask-Cors==3.0.7
 pytest-flask==0.14.0
+kafka-python
