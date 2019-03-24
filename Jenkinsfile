@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment{
+        LOCAL_SUGGEST_IP = "${env.SUGGEST_IP}"
+    }
     stages {
         stage('Build') {
             steps {
@@ -11,8 +13,8 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				sh '''
-					JENKINS_NODE_COOKIE=dontKillMe nohup ssh ubuntu@149.165.156.78 '
-						killall -9 python3
+					JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_SUGGEST_IP '
+						killall -9 python3 || true
 						rm -r Spark
 						git clone https://github.com/airavata-courses/Spark.git
 						cd Spark
@@ -20,8 +22,9 @@ pipeline {
 						cd suggestion
 						sudo apt-get install python3-pip -y
 						pip3 install -r requirements.txt
-						python3 ./suggestion/app.py
-					'
+				        	'
+					JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@$LOCAL_SUGGEST_IP python3 Spark/suggestion/suggestion/app.py -ip $LOCAL_SUGGEST_IP
+					       
 				'''
 			}
 		}
