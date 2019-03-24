@@ -1,6 +1,6 @@
 module.exports =  {
-  host     : 'localhost',
+  host     : 'SG-MovieDb-352-master.servers.mongodirector.com',
   user     : 'root',
-  password : 'root',
+  password : 'Spark@movie123',
   database : 'movie'
 }
