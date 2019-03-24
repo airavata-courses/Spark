@@ -30,8 +30,12 @@ pipeline {
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP rm -rf /home/ubuntu/Spark/'
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP mkdir -p /home/ubuntu/Spark/'
 			sh 'scp -r /var/lib/jenkins/workspace/search-build-test-deploy/search/target/search-0.0.1-SNAPSHOT.jar ubuntu@$LOCAL_SEARCH_IP:/home/ubuntu/Spark/'
-                	sh 'ssh ubuntu@$LOCAL_SEARCH_IP killall -9 java || true'
-			sh 'ssh -f ubuntu@$LOCAL_SEARCH_IP java -jar -Durl.SEARCH_IP=$LOCAL_SEARCH_IP /home/ubuntu/Spark/search-0.0.1-SNAPSHOT.jar'
+			sh 'ssh ubuntu@$LOCAL_SEARCH_IP killall -9 java || true'
+			sh 'ssh ubuntu@$LOCAL_SEARCH_IP docker container rm -f search || true'
+			sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo docker run -d -p 8080:8080 search'
+			sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo docker build -t search:latest .'
+
+		//			sh 'ssh -f ubuntu@$LOCAL_SEARCH_IP java -jar -Durl.SEARCH_IP=$LOCAL_SEARCH_IP /home/ubuntu/Spark/search-0.0.1-SNAPSHOT.jar'
 		} 	
     }
 }
