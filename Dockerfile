@@ -1,6 +1,6 @@
 FROM java:8-jdk-alpine
 
-COPY ./search-0.0.1-SNAPSHOT.jar /app/
+COPY ./target/search-0.0.1-SNAPSHOT.jar /app/
 
 WORKDIR /app
 
