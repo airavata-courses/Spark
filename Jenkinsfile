@@ -26,7 +26,7 @@ pipeline {
 		    sudo docker login --username=aralshi --password=indiatrip2019 || true
                     id=$(sudo docker images | grep -E 'search' | awk -e '{print $3}')
                     sudo docker tag $id aralshi/findyournextmovie:1.0.0
-		    docker push aralshi/findyournextmovie:1.0.0
+		    sudo docker push aralshi/findyournextmovie:1.0.0
 		    '''
             }
 	    
