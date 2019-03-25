@@ -31,10 +31,13 @@ pipeline {
             }
 	    
 	}
+	    stage('deploy') {
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@149.165.157.60 sudo docker run --rm -d -p 8080:8080 aralshi/findyournextmovie:1.0.0'
+	    }
     }
     post {
         success{
-                   	archiveArtifacts artifacts: 'search/target/search-0.0.1-SNAPSHOT.jar'
+                   	/*archiveArtifacts artifacts: 'search/target/search-0.0.1-SNAPSHOT.jar'
 			echo env.LOCAL_SEARCH_IP
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP export SEARCH_IP=$LOCAL_SEARCH_IP' 
 		        sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo apt update'
@@ -45,7 +48,7 @@ pipeline {
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP killall -9 java || true'
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP docker container rm -f search || true'
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo docker run -d -p 8080:8080 search'
-			sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo docker build -t search:latest .'
+			sh 'ssh ubuntu@$LOCAL_SEARCH_IP sudo docker build -t search:latest .'*/
 
 		//			sh 'ssh -f ubuntu@$LOCAL_SEARCH_IP java -jar -Durl.SEARCH_IP=$LOCAL_SEARCH_IP /home/ubuntu/Spark/search-0.0.1-SNAPSHOT.jar'
 		} 	
