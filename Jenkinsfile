@@ -33,7 +33,7 @@ pipeline {
 	}
 	    stage('deploy') {
 		    steps{
-		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@149.165.157.60 sudo docker run --rm -d -p 8080:8080 aralshi/findyournextmovie:1.0.0'
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_SEARCH_IP sudo docker run --rm -d -p 8080:8080 aralshi/findyournextmovie:1.0.0'
 		    }
 	    }
     }
