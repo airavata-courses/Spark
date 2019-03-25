@@ -32,11 +32,14 @@ pipeline {
 	    
 	}
 	    stage('deploy') {
+		    steps{
 		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@149.165.157.60 sudo docker run --rm -d -p 8080:8080 aralshi/findyournextmovie:1.0.0'
+		    }
 	    }
     }
     post {
         success{
+		echo 'Successful!!'
                    	/*archiveArtifacts artifacts: 'search/target/search-0.0.1-SNAPSHOT.jar'
 			echo env.LOCAL_SEARCH_IP
 			sh 'ssh ubuntu@$LOCAL_SEARCH_IP export SEARCH_IP=$LOCAL_SEARCH_IP' 
