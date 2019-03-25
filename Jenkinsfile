@@ -22,6 +22,11 @@ pipeline {
             }
 	    
 	}
+	    stage('deploy') {
+		    steps{
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_SUGGEST_IP sudo docker run --rm -d -p 5000:5000 aralshi/suggestion:1.0.0'
+		    }
+	    }
 		/*stage('Deploy') {
 			steps {
 				sh '''
