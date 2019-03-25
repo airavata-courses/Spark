@@ -21,11 +21,13 @@ pipeline {
         }
 	stage('build docker') {
 		steps {
-                    sh 'sudo docker build . -t search'
-		    sh 'sudo docker login --username=aralshi --password=indiatrip2019 || true'
-                    sh 'id=$(sudo docker images | grep -E 'search' | awk -e '{print $3}')'
-                    sh 'sudo docker tag $id aralshi/findyournextmovie:1.0.0'
-		    sh 'docker push aralshi/findyournextmovie:search:1.0.0'
+                    sh '''
+		    sudo docker build . -t search
+		    sudo docker login --username=aralshi --password=indiatrip2019 || true
+                    id=$(sudo docker images | grep -E 'search' | awk -e '{print $3}')
+                    sudo docker tag $id aralshi/findyournextmovie:1.0.0
+		    docker push aralshi/findyournextmovie:search:1.0.0
+		    '''
             }
 	    
 	}
