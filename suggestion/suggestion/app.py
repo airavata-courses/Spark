@@ -11,8 +11,8 @@ import socket
 from movie import Movie
 #Jenkins test build
 parser = ConfigParser()
-if os.path.isfile('Spark/suggestion/suggestion/config.ini'):
-    parser.read('Spark/suggestion/suggestion/config.ini')
+if os.path.isfile('./app/config.ini'):
+    parser.read('./app/config.ini')
 else:
     print("error finding the config file")
     exit()
