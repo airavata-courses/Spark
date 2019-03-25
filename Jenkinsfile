@@ -20,10 +20,8 @@ pipeline {
             }
         }
 	stage('build docker') {
-	   steps {
-                dir("search") {
-                    sh 'sudo docker build . -t search:latest'
-                }
+		steps {
+                    sh 'sudo docker build . -t search:latest
             }
 	    
 	}
