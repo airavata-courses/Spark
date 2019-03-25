@@ -1,6 +1,6 @@
 FROM java:8-jdk-alpine
 
-COPY ../../../var/lib/jenkins/workspace/search-build-test-deploy/search/target/search-0.0.1-SNAPSHOT.jar /app/
+COPY ../../../jenkins/workspace/search-build-test-deploy/search/target/search-0.0.1-SNAPSHOT.jar /app/
 
 WORKDIR /app
 
