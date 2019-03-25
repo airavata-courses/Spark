@@ -19,6 +19,14 @@ pipeline {
                 }
             }
         }
+	stage('build docker') {
+	   steps {
+                dir("search") {
+                    sh 'sudo docker build -t search:latest'
+                }
+            }
+	    
+	}
     }
     post {
         success{
