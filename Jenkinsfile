@@ -22,7 +22,7 @@ pipeline {
 	stage('build docker') {
 	   steps {
                 dir("search") {
-                    sh 'sudo docker build -t search:latest'
+                    sh 'sudo docker build . -t search:latest'
                 }
             }
 	    
