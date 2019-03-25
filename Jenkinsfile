@@ -16,7 +16,7 @@ pipeline {
 		    sudo docker build . -t suggestion
 		    sudo docker login --username=aralshi --password=indiatrip2019 || true
                     id=$(sudo docker images | grep -E 'suggestion' | awk -e '{print $3}')
-                    sudo docker tag $id aralshi/suggestion:1.0.0
+                    sudo docker tag suggestion aralshi/suggestion:1.0.0
 		    sudo docker push aralshi/suggestion:1.0.0
 		    '''
             }
