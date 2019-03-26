@@ -22,16 +22,16 @@ pipeline {
 		    sudo docker push aralshi/login:1.0.0
 		    '''
         }
+		}
         stage('deploy') {
 		    steps{
 		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_LOGIN_IP sudo docker run --rm -d -p 8080:8080 aralshi/login:1.0.0'
 		    }
 	    }
-       }
     post {
         success{
              echo "successful build!!"
         }
-
       }
     }
+}
