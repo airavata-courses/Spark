@@ -12,33 +12,21 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
-            steps {
-                echo env.LOCAL_LOGIN_IP
-              sh '''
-                ssh ubuntu@$LOCAL_LOGIN_IP '
-                    killall -9 node || true
-                    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-                    sudo apt-get install -y nodejs
-                    sudo apt-get install -y npm
-                    sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
-                    sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
-                    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
-                    sudo mysql -uroot -proot -e "create database if not exists movie"
-                    sudo mysql -uroot -proot -e "CREATE TABLE IF NOT EXISTS movie.users (user_id varchar(36), first_name VARCHAR(20), last_name VARCHAR(20), email VARCHAR(50), password VARCHAR(100), dob DATE, gender CHAR(1), country VARCHAR(20), created DATE, modified DATE)"
-                    sudo mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'"
-                    rm -r Spark
-                    git clone https://github.com/airavata-courses/Spark.git
-                    cd Spark/
-                    git checkout develop-login_service
-                    cd findyournextmovie/
-                    npm install
-                '
-              '''
-
-                sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@$LOCAL_LOGIN_IP npm start --prefix Spark/findyournextmovie -- --LOGIN_IP=$LOCAL_LOGIN_IP'
-            }
+		stage('build docker') {
+		steps {
+            sh '''
+		    sudo docker build . -t login
+		    sudo docker login --username=aralshi --password=indiatrip2019 || true
+                    id=$(sudo docker images | grep -E 'login' | awk -e '{print $3}')
+                    sudo docker tag login aralshi/login:1.0.0
+		    sudo docker push aralshi/login:1.0.0
+		    '''
         }
+        stage('deploy') {
+		    steps{
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_LOGIN_IP sudo docker run --rm -d -p 8080:8080 aralshi/login:1.0.0'
+		    }
+	    }
        }
     post {
         success{
