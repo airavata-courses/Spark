@@ -27,15 +27,15 @@ pipeline {
 		    sudo docker build . -t rating
 		    sudo docker login --username=aralshi --password=indiatrip2019 || true
                     id=$(sudo docker images | grep -E 'rating' | awk -e '{print $3}')
-                    sudo docker tag $id aralshi/rating:1.0.0
-		    sudo docker push aralshi/rating:1.0.0
+                    sudo docker tag $id aralshi/rating:latest
+		    sudo docker push aralshi/rating:latest
 		    '''
             }
 	    
 	}
 	    stage('deploy') {
 		    steps{
-		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_RATING_IP sudo docker run --rm -d -p 8080:8080 aralshi/rating:1.0.0'
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_RATING_IP sudo docker run --rm -d -p 8080:8080 aralshi/rating:latest'
 		    }
 	    }
     }
