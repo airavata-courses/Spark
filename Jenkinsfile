@@ -27,7 +27,7 @@ pipeline {
 		    sudo docker build . -t rating
 		    sudo docker login --username=aralshi --password=indiatrip2019 || true
                     id=$(sudo docker images | grep -E 'rating' | awk -e '{print $3}')
-                    sudo docker tag $id aralshi/rating:0.0.1
+                    sudo docker tag rating aralshi/rating:0.0.1
 		    sudo docker push aralshi/rating:0.0.1
 		    '''
             }
