@@ -25,15 +25,15 @@ pipeline {
 		    sudo docker build . -t search
 		    sudo docker login --username=aralshi --password=indiatrip2019 || true
                     id=$(sudo docker images | grep -E 'search' | awk -e '{print $3}')
-                    sudo docker tag $id aralshi/findyournextmovie:1.0.0
-		    sudo docker push aralshi/findyournextmovie:1.0.0
+                    sudo docker tag $id aralshi/search:1.0.0
+		    sudo docker push aralshi/search:1.0.0
 		    '''
             }
 	    
 	}
 	    stage('deploy') {
 		    steps{
-		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_SEARCH_IP sudo docker run --rm -d -p 8080:8080 aralshi/findyournextmovie:1.0.0'
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_SEARCH_IP sudo docker run --rm -d -p 8080:8080 aralshi/search:1.0.0'
 		    }
 	    }
     }
