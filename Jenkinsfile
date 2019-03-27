@@ -21,10 +21,28 @@ pipeline {
                 }
             }
         }
+		stage('build docker') {
+		steps {
+                    sh '''
+		    sudo docker build . -t rating
+		    sudo docker login --username=aralshi --password=indiatrip2019 || true
+                    id=$(sudo docker images | grep -E 'rating' | awk -e '{print $3}')
+                    sudo docker tag $id aralshi/rating:1.0.0
+		    sudo docker push aralshi/rating:1.0.0
+		    '''
+            }
+	    
+	}
+	    stage('deploy') {
+		    steps{
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_RATING_IP sudo docker run --rm -d -p 8080:8080 aralshi/rating:1.0.0'
+		    }
+	    }
     }
     post {
         success{
-		    archiveArtifacts artifacts: 'rating/target/rating-0.0.1-SNAPSHOT.jar'
+			echo 'Successful!!'
+		    /*archiveArtifacts artifacts: 'rating/target/rating-0.0.1-SNAPSHOT.jar'
 		    sh '''
 		        ssh ubuntu@$LOCAL_RATING_IP rm -rf /home/ubuntu/Spark/
 			ssh ubuntu@$LOCAL_RATING_IP mkdir -p /home/ubuntu/Spark/
@@ -39,7 +57,7 @@ pipeline {
                         sudo mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'"
 			killall -9 java || true'
 			ssh -f ubuntu@$LOCAL_RATING_IP java -jar -Durl.RATING_IP=$LOCAL_RATING_IP /home/ubuntu/Spark/rating-0.0.1-SNAPSHOT.jar
-		    '''
+		    '''*/
                 }
     }
 }
