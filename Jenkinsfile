@@ -12,31 +12,22 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
+        stage('Build Docker') {
 			steps {
 				sh '''
-                    			ssh ubuntu@149.165.157.231 '
-					 	killall -9 node
-						echo 'starting bash...'
-						sudo apt-get install -y nodejs
-						echo 'node js installed...'
-						rm -rf Spark
-						git clone https://github.com/airavata-courses/Spark.git
-						cd Spark/
-						git checkout develop-react_UI
-						cd findyournextmovie/
-						echo 'git job done.. starting npm install'
-						npm install
-					' 
-				'''
-				sh '''
-					JENKINS_NODE_COOKIE=dontKillMe nohup ssh -f ubuntu@149.165.157.231 '
-						cd Spark/findyournextmovie
-						echo 'starting npm start'
-						npm start
-					'
+				sudo docker build . -t userinterface
+				sudo docker login --username=aralshi --password=indiatrip2019 || true
+						id=$(sudo docker images | grep -E 'userinterface' | awk -e '{print $3}')
+						sudo docker tag userinterface aralshi/userinterface:1.0.0
+				sudo docker push aralshi/userinterface:1.0.0
 				'''
 			}
 		}
+		
+		stage('Deploy') {
+            steps{
+		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$149.165.157.231 sudo docker run --rm -d -p 8080:8080 aralshi/userinterface:1.0.0'
+		    }
+        }
     }
 }
