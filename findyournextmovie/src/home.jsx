@@ -92,7 +92,7 @@ class Home extends Component{
       userId: localStorage.getItem("ACCESS_TOKEN"),
     });
 
-    axios.get(localStorage.getItem("search")+'/search/toprated' )
+    axios.get("http://search:8080"+'/search/toprated' )
         .then(res => {
           this.setState({
             movieDetails: res.data.movies,
