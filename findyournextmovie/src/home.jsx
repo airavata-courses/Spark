@@ -92,7 +92,7 @@ class Home extends Component{
       userId: localStorage.getItem("ACCESS_TOKEN"),
     });
 
-    axios.get('http://149.165.169.128:30001/search/toprated')
+    axios.get('http://spark-kubernetes-master:30001/search/toprated')
         .then(res => {
           this.setState({
             movieDetails: res.data.movies,
