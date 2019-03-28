@@ -92,7 +92,7 @@ class Home extends Component{
       userId: localStorage.getItem("ACCESS_TOKEN"),
     });
 
-    axios.get('http://search.film.svc.cluster.local:8080/search/toprated')
+    axios.get('http://149.165.169.128:30001/search/toprated')
         .then(res => {
           this.setState({
             movieDetails: res.data.movies,
