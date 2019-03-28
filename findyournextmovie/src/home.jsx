@@ -19,7 +19,6 @@ import { Link } from "react-router-dom";
 import MovieDetails from './MovieDetails';
 import NonEditableStarRating from './NonEditableStarRating';
 import Alert from "react-s-alert";
-import {getAllServices} from "./ApiUtil";
 
 const styles = theme => ({
   icon: {
@@ -79,20 +78,12 @@ class Home extends Component{
   }
 
   componentWillMount() {
-    getAllServices().then(res => {
-      Object.keys(res).forEach(function(key) {
-        localStorage.setItem(key, res[key]);
-      });
-    }).catch(error => {
-      Alert.error("Sorry! Some error occurred in fetching URI.");
-    });
-
     this.setState({
       isAuthenticated: localStorage.getItem("isAuthenticated"),
       userId: localStorage.getItem("ACCESS_TOKEN"),
     });
 
-    axios.get('http://spark-kubernetes-master:30001/search/toprated')
+    axios.get('http://149.165.170.39:30001/search/toprated')
         .then(res => {
           this.setState({
             movieDetails: res.data.movies,
@@ -108,7 +99,7 @@ class Home extends Component{
     if(this.state.searchText == '' || this.state.searchText == ' ' || this.state.searchText == null)
       Alert.error("Please enter a valid movie name.");
     else{
-        axios.get(localStorage.getItem("search")+'/search/keyword?keyword=' +  this.state.searchText)
+        axios.get('149.165.170.39:30001/search/keyword?keyword=' +  this.state.searchText)
             .then(res => {
               this.setState({
                 movieDetails: res.data.movies,
@@ -129,7 +120,7 @@ class Home extends Component{
     if (localStorage.getItem("isAuthenticated") === null) {
       this.props.history.push('\login');
     }else if(localStorage.getItem('isAuthenticated') == "true"){
-      axios.get(localStorage.getItem("suggestion")+'/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
+      axios.get('149.165.170.39:30005/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
           .then(res => {
             this.setState({
               movieDetails: res.data.movies,
