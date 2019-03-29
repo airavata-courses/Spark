@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment{
+        LOCAL_KUBERNETES_IP = "${env.KUBERNETES_IP}"
+    }
     stages {
         stage('Build React App') {
             steps {
@@ -26,7 +28,18 @@ pipeline {
 		
 		stage('Deploy') {
             steps{
-		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@149.165.157.231 sudo docker run --rm -d -p 3000:3000 aralshi/userinterface:1.0.0'
+//		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@149.165.157.231 sudo docker run --rm -d -p 3000:3000 aralshi/userinterface:1.0.0'
+
+				 sh '''
+					JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_KUBERNETES_IP '
+						rm -r Spark_UI
+						git clone https://github.com/airavata-courses/Spark.git Spark_UI
+						cd Spark_UI/
+						git checkout develop-react_UI
+						sudo kubectl delete deployment react
+						sudo kubectl apply -f reactDeployment.yml
+					'
+				'''
 		    }
         }
     }
