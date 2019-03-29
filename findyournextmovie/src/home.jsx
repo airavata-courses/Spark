@@ -83,7 +83,7 @@ class Home extends Component{
       userId: localStorage.getItem("ACCESS_TOKEN"),
     });
 
-    axios.get('http://149.165.170.39:30001/search/toprated')
+    axios.get('http://149.165.169.128:30001/search/toprated')
         .then(res => {
           this.setState({
             movieDetails: res.data.movies,
@@ -99,7 +99,7 @@ class Home extends Component{
     if(this.state.searchText == '' || this.state.searchText == ' ' || this.state.searchText == null)
       Alert.error("Please enter a valid movie name.");
     else{
-        axios.get('http://149.165.170.39:30001/search/keyword?keyword=' +  this.state.searchText)
+        axios.get('http://149.165.169.128:30001/search/keyword?keyword=' +  this.state.searchText)
             .then(res => {
               this.setState({
                 movieDetails: res.data.movies,
@@ -120,7 +120,7 @@ class Home extends Component{
     if (localStorage.getItem("isAuthenticated") === null) {
       this.props.history.push('\login');
     }else if(localStorage.getItem('isAuthenticated') == "true"){
-      axios.get('http://149.165.170.39:30005/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
+      axios.get('http://149.165.169.128:30005/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
           .then(res => {
             this.setState({
               movieDetails: res.data.movies,
