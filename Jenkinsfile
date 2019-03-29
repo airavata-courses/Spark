@@ -26,7 +26,7 @@ pipeline {
         stage('Deploy') {
             steps{
 				sh '''
-					JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_KUBERNETES_IP '
+					JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_IP '
 						rm -r Spark_login
 						git clone https://github.com/airavata-courses/Spark.git Spark_login
 						cd Spark_login/
