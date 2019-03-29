@@ -19,11 +19,8 @@ else:
 
 app = Flask(__name__)
 
-# Default suggest server ip
-SELF_SERVER_IP = parser.get('constants','self_server_ip')
-
-# Service registry
-SERVICE_REGISTRY_URL = parser.get('rating', 'zookeeper_url')
+# Database url
+DB_URL = parser.get('rating', 'db_url')
 
 # TMDb url
 TMDb_URL = parser.get('tmdb','tmdb_url')
@@ -40,10 +37,7 @@ def suggestion():
         if user_id is None:
             return "User Id cannot be blank", 400
         try:
-            db_url = discover_rating()
-            if db_url is None:
-                return "Unable to discover rating service in zookeeper", 400
-            db_url = db_url + "/usermovierating/getbyuserid"
+            db_url = DB_URL + "/getbyuserid"
             params = {"user_id": user_id}
             resp = requests.get(url=db_url, params=params)
             if resp.status_code != requests.codes.ok:
@@ -105,43 +99,5 @@ def suggestion():
             return jsonify(str(e)), 400
 
 
-# Below method registers the suggestion service on Zookeeper using the servicergistry service
-def register_suggestion():
-    try:
-        argparser = ArgumentParser()
-        argparser.add_argument("-ip", "--ipaddr",
-                            action="store", dest="suggest_ip", default=SELF_SERVER_IP,
-                            help="floating ip of the machine on which suggest microservice is running")
-        args = argparser.parse_args()
-        uri = 'http://' + str(args.suggest_ip) + ":5000"
-        service_registry_url = SERVICE_REGISTRY_URL + "/register"
-        params = {"name": "suggestion", "uri": uri}
-        requests.post(url=service_registry_url, params=params)
-        return True
-    except Exception as e:
-        print(str(e))
-        return False
-
-
-# Below method gets the uri corresponding to rating uri by using the serviceregistry service
-def discover_rating():
-    try:
-        zookeeper_url = SERVICE_REGISTRY_URL + "/discover"
-        params = {"name": "rating"}
-        uri = requests.get(url=zookeeper_url, params=params)
-        return uri.text
-    except:
-        return None
-
-
 if __name__ == "__main__":
-    if register_suggestion():
-        print("Suggestion service registered")
-    else:
-        print("Suggestion service unable to register")
-
     app.run(debug=True, host='0.0.0.0', use_reloader=False)
-
-
-
-
