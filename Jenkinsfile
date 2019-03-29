@@ -31,16 +31,18 @@ pipeline {
               }
 	        }
 	    stage('deploy') {
-      sh '''
-          JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_IP '
-          rm -r Spark_search
-          git clone https://github.com/airavata-courses/Spark.git Spark_search
-          cd Spark_search/
-          git checkout develop-search_service
-          sudo kubectl delete deployment search
-          sudo kubectl apply -f searchDeployment.yml
-        '
-        '''
+          steps {
+          sh '''
+              JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_IP '
+              rm -r Spark_search
+              git clone https://github.com/airavata-courses/Spark.git Spark_search
+              cd Spark_search/
+              git checkout develop-search_service
+              sudo kubectl delete deployment search
+              sudo kubectl apply -f searchDeployment.yml
+            '
+            '''
+          }
 	    }
     }
     post {
