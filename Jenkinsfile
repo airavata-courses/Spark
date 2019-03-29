@@ -24,8 +24,7 @@ pipeline {
                         sh '''
                     		    sudo docker build . -t search
                     		    sudo docker login --username=aralshi --password=indiatrip2019 || true
-                                        id=$(sudo docker images | grep -E 'search' | awk -e '{print $3}')
-                                        sudo docker tag $id aralshi/search:1.0.0
+                                        sudo docker tag searchv1 aralshi/search:1.0.0
                     		    sudo docker push aralshi/search:1.0.0
         		            '''
               }
