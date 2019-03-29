@@ -24,7 +24,7 @@ pipeline {
                         sh '''
                     		    sudo docker build . -t search
                     		    sudo docker login --username=aralshi --password=indiatrip2019 || true
-                                        sudo docker tag searchv1 aralshi/search:1.0.0
+                                        sudo docker tag search aralshi/search:1.0.0
                     		    sudo docker push aralshi/search:1.0.0
         		            '''
               }
