@@ -28,6 +28,7 @@ pipeline {
             rm -r Spark_suggestion
             git clone https://github.com/airavata-courses/Spark.git Spark_suggestion
             cd Spark_suggestion/
+            git checkout develop-suggestion_service
             sudo kubectl delete deployment suggestion
             sudo kubectl apply -f suggestionDeployment.yml
           '
