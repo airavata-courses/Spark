@@ -1,7 +1,7 @@
 pipeline {
     agent any
 	environment {
-		LOCAL_RATING_IP = "${env.RATING_IP}"
+		LOCAL_KUBERNETES_IP = "${env.KUBERNETES_IP}"
 	}
     stages {
         stage('install dependencies') {
@@ -35,29 +35,22 @@ pipeline {
 	}
 	    stage('deploy') {
 		    steps{
-		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_RATING_IP sudo docker run --rm -d -p 8080:8080 aralshi/rating:0.0.1'
+		    	sh '''
+            			JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_IP '
+            				rm -r Spark_rating
+            				git clone https://github.com/airavata-courses/Spark.git Spark_rating
+            				cd Spark_rating/
+            				git checkout develop-user_rating_management_service
+            				sudo kubectl delete deployment rating
+            				sudo kubectl apply -f ratingDeployment.yml
+          			'
+          		'''
 		    }
 	    }
     }
     post {
         success{
 			echo 'Successful!!'
-		    /*archiveArtifacts artifacts: 'rating/target/rating-0.0.1-SNAPSHOT.jar'
-		    sh '''
-		        ssh ubuntu@$LOCAL_RATING_IP rm -rf /home/ubuntu/Spark/
-			ssh ubuntu@$LOCAL_RATING_IP mkdir -p /home/ubuntu/Spark/
-		        JENKINS_NODE_COOKIE=dontKillMe scp -r /var/lib/jenkins/workspace/rating-build-test-deploy/rating/target/rating-0.0.1-SNAPSHOT.jar ubuntu@$LOCAL_RATING_IP:/home/ubuntu/Spark/
-			nohup ssh ubuntu@$LOCAL_RATING_IP '
-			sudo apt update
-			sudo apt install default-jdk -y
-			sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
-                        sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
-                        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
-                        sudo mysql -uroot -proot -e "create database if not exists movie"
-                        sudo mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'"
-			killall -9 java || true'
-			ssh -f ubuntu@$LOCAL_RATING_IP java -jar -Durl.RATING_IP=$LOCAL_RATING_IP /home/ubuntu/Spark/rating-0.0.1-SNAPSHOT.jar
-		    '''*/
                 }
     }
 }
