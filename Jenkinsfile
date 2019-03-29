@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     	environment {
-            LOCAL_LOGIN_IP = "${env.LOGIN_IP}"
+			LOCAL_KUBERNETES_IP = "${env.KUBERNETES_IP}"
         }
     stages {
         stage('Build') {
@@ -25,7 +25,18 @@ pipeline {
 		}
         stage('Deploy') {
             steps{
-		    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_LOGIN_IP sudo docker run --rm -d -p 8080:8080 aralshi/login:1.0.0'
+				sh '''
+					JENKINS_NODE_COOKIE=dontKillMe nohup ssh -tt ubuntu@$LOCAL_KUBERNETES_IP '
+						rm -r Spark_login
+						git clone https://github.com/airavata-courses/Spark.git Spark_login
+						cd Spark_login/
+						git checkout develop-login_service
+						sudo kubectl delete deployment login
+						sudo kubectl apply -f loginDeployment.yml
+					'
+				'''
+
+
 		    }
         }
        }
