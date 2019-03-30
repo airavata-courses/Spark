@@ -59,7 +59,7 @@ def suggestion():
                     recommended_movies = sorted(suggestions, key=lambda k:k['popularity'],
                                                 reverse=True)[:NUMBER_OF_RECOMMENDATIONS]
                 else:
-                    return 'TMDb api not working', 404
+                    return 'TMDb api not working', 200
 
             else:
                 if len(seen_movies.keys()) <= 3:
