@@ -71,7 +71,7 @@ class MenuAppBar extends React.Component {
 
         <AppBar position="static" style={{backgroundColor: 'black'}}>
           <Toolbar>
-            <Link to= {"/"} style = {{color: 'white', textAlign: 'center', textDecoration: 'none'}}>
+            <Link to= {"/home"} style = {{color: 'white', textAlign: 'center', textDecoration: 'none'}}>
               <Typography variant="h6" color="inherit" className={classes.grow}>
                 Find Your Next Movie
               </Typography>
