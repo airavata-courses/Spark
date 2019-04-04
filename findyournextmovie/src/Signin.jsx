@@ -129,7 +129,7 @@ handleSubmit(event) {
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Confirm Password</InputLabel>
-              <Input name="c_password" type="c_password" id="c_password" autoComplete="confirm-password" />
+              <Input name="c_password" type="password" id="c_password" autoComplete="confirm-password" />
             </FormControl>
             <FormControl margin="normal" fullWidth>
               <Input name="dob" type="date" id="dob" autoComplete="dd-mm-yyyy" />
