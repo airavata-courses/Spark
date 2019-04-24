@@ -120,7 +120,7 @@ class Home extends Component{
     if (localStorage.getItem("isAuthenticated") === null) {
       this.props.history.push('\login');
     }else if(localStorage.getItem('isAuthenticated') == "true"){
-      axios.get('http://149.165.169.128:30005/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
+      axios.get('http://149.165.169.90:80/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
           .then(res => {
             this.setState({
               movieDetails: res.data.movies,
