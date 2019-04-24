@@ -76,7 +76,7 @@ class LogIn extends Component{
     event.preventDefault();
     const loginRequest = Object.assign({}, this.state);
 
-    axios.post('http://149.165.169.128:30003/api/login',  loginRequest )
+    axios.post('http://149.165.169.90:80/api/login',  loginRequest )
         .then(res => {
           localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
           localStorage.setItem('isAuthenticated', true);
