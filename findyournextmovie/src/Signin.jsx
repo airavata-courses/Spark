@@ -86,7 +86,7 @@ handleSubmit(event) {
   signUpRequest['gender'] = 'F';
   signUpRequest['country'] = 'India'
 
-  axios.post('http://149.165.169.128:30003/api/register',  signUpRequest )
+  axios.post('http://149.165.169.90:80/api/register',  signUpRequest )
       .then(res => {
         Alert.success("Signed in successfully.");
         this.props.history.push("/login");
