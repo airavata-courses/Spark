@@ -2,6 +2,7 @@ pipeline {
     agent any
 	environment {
 		LOCAL_KUBERNETES_IP = "${env.KUBERNETES_IP}"
+		LOCAL_KUBERNETES_TACC_IP = "${env.KUBERNETES_TACC_IP}"
 	}
     stages {
         stage('install dependencies') {
@@ -37,6 +38,16 @@ pipeline {
 		    steps{
 		    	sh '''
             			JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_IP '
+            				rm -r Spark_rating
+            				git clone https://github.com/airavata-courses/Spark.git Spark_rating
+            				cd Spark_rating/
+            				git checkout develop-user_rating_management_service
+            				sudo kubectl delete deployment rating
+            				sudo kubectl apply -f ratingDeployment.yml
+          			'
+          		'''
+			sh '''
+            			JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_TACC_IP '
             				rm -r Spark_rating
             				git clone https://github.com/airavata-courses/Spark.git Spark_rating
             				cd Spark_rating/
