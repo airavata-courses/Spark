@@ -62,7 +62,7 @@ const styles = theme => ({
   },
 });
 
-class Home extends Component{
+class MovieHome extends Component{
   constructor(props) {
       super(props);
       this.state = {
@@ -197,4 +197,4 @@ class Home extends Component{
   }
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(MovieHome);

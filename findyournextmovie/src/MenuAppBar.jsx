@@ -54,29 +54,36 @@ class MenuAppBar extends React.Component {
       Alert.success("Logged out successfully");
   }
 
+  login() {
+    this.props.auth.login();
+  }
+
   render() {
     const { classes } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     let logOption;
-    if(localStorage.getItem('isAuthenticated') == "true"){
-      logOption = <Link to= {"/home"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}} onClick = {this.logout.bind(this)}> Log Out </Link>
-    }else{
-      logOption = <Link to= {"/login"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}}> Log In </Link>
-    }
+    // if(localStorage.getItem('isAuthenticated') == "true"){
+    //   logOption = <Link to= {"/moviehome"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}} onClick = {this.logout.bind(this)}> Log Out </Link>
+    // }else{
+    //   logOption = <Link to= {"/login"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}}> Log In </Link>
+    // }
+
     return (
       <div className={classes.root}>
 
         <AppBar position="static" style={{backgroundColor: 'black'}}>
           <Toolbar>
-            <Link to= {"/home"} style = {{color: 'white', textAlign: 'center', textDecoration: 'none'}}>
+            <Link to= {"/moviehome"} style = {{color: 'white', textAlign: 'center', textDecoration: 'none'}}>
               <Typography variant="h6" color="inherit" className={classes.grow}>
                 Find Your Next Movie
               </Typography>
             </Link>
                 <Typography variant="h10" color="white" style={{marginLeft: '2%', width: '5%'}}>
-                {logOption}
+                <a style={{ cursor: 'pointer' }}
+                  onClick={this.login.bind(this)}
+                > login </a>
                 </Typography>
           </Toolbar>
         </AppBar>
