@@ -3,6 +3,7 @@ pipeline {
     
     	environment {
 			LOCAL_KUBERNETES_IP = "${env.KUBERNETES_IP}"
+			LOCAL_KUBERNETES_TACC_IP = "${env.KUBERNETES_TACC_IP}"
         }
     stages {
         stage('Build') {
@@ -27,6 +28,16 @@ pipeline {
             steps{
 				sh '''
 					JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_IP '
+						rm -r Spark_login
+						git clone https://github.com/airavata-courses/Spark.git Spark_login
+						cd Spark_login/
+						git checkout develop-login_service
+						sudo kubectl delete deployment login
+						sudo kubectl apply -f loginDeployment.yml
+					'
+				'''
+		    		sh '''
+					JENKINS_NODE_COOKIE=dontKillMe ssh ubuntu@$LOCAL_KUBERNETES_TACC_IP '
 						rm -r Spark_login
 						git clone https://github.com/airavata-courses/Spark.git Spark_login
 						cd Spark_login/
