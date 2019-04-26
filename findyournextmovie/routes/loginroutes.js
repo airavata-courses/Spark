@@ -38,7 +38,8 @@ exports.register = function(req,res){
     console.log('The solution is: ', results);
     res.send({
       "code":200,
-      "success":"user registered sucessfully"
+      "success":"user registered sucessfully",
+      "user_id":users.user_id
         });
   }
   });
