@@ -13,7 +13,7 @@ import SearchBar from 'material-ui-search-bar'
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import NonEditableStarRating from './NonEditableStarRating';
-import Alert from "react-s-alert";
+import Alert from "react-s-alert"; 
 
 const styles = theme => ({
   icon: {
