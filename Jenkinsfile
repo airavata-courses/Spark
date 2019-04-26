@@ -31,7 +31,7 @@ pipeline {
 						rm -r Spark_login
 						git clone https://github.com/airavata-courses/Spark.git Spark_login
 						cd Spark_login/
-						git checkout develop-login_service
+						git checkout develop-login_service_blue
 						sudo kubectl apply -f loginBlueDeployment.yml
 					'
 				'''
@@ -40,7 +40,7 @@ pipeline {
 						rm -r Spark_login
 						git clone https://github.com/airavata-courses/Spark.git Spark_login
 						cd Spark_login/
-						git checkout develop-login_service
+						git checkout develop-login_service_blue
 						sudo kubectl apply -f loginBlueDeployment.yml
 					'
 				'''
