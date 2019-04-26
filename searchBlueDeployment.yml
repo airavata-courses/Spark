@@ -7,6 +7,7 @@ spec:
   type: LoadBalancer
   selector:
     app: search
+    color: blue
   ports:
       # Port accessible inside cluster
     - port: 8080
@@ -20,7 +21,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: search
+  name: search_blue
 spec:
   selector:
     matchLabels:
@@ -30,6 +31,7 @@ spec:
     metadata:
       labels:
         app: search
+        color: blue
     spec:
       containers:
         - name: search
