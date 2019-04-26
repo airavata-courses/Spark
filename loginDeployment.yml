@@ -7,6 +7,7 @@ spec:
   type: LoadBalancer
   selector:
     app: login
+    version: 1.0
   ports:
       # Port accessible inside cluster
     - port: 8080
@@ -30,6 +31,7 @@ spec:
     metadata:
       labels:
         app: login
+        version: 1.0
     spec:
       containers:
         - name: login
