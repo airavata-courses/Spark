@@ -37,9 +37,8 @@ pipeline {
               rm -r Spark_search
               git clone https://github.com/airavata-courses/Spark.git Spark_search
               cd Spark_search/
-              git checkout develop-search_service
-              sudo kubectl delete deployment search
-              sudo kubectl apply -f searchDeployment.yml
+              git checkout develop-search_service_blue
+              sudo kubectl apply -f searchBlueDeployment.yml
             '
             '''
 		  sh '''
@@ -47,9 +46,8 @@ pipeline {
               rm -r Spark_search
               git clone https://github.com/airavata-courses/Spark.git Spark_search
               cd Spark_search/
-              git checkout develop-search_service
-              sudo kubectl delete deployment search
-              sudo kubectl apply -f searchDeployment.yml
+              git checkout develop-search_service_blue
+              sudo kubectl apply -f searchBlueDeployment.yml
             '
             '''
           }
