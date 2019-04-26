@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import StarRatingComponent from 'react-star-rating-component';
 import axios from 'axios';
 import Alert from "react-s-alert";
@@ -22,7 +21,7 @@ class StarRating extends React.Component {
       movieId: this.props.movie_id,
     });
     if(localStorage.getItem("isAuthenticated") == "true"){
-        axios.get('http://149.165.169.128:30004/usermovierating/getbyuseridmovieid?user_id=' + localStorage.getItem("ACCESS_TOKEN") + '&movie_id=' + this.props.movie_id)
+        axios.get('http://149.165.169.90:80/usermovierating/getbyuseridmovieid?user_id=' + localStorage.getItem("ACCESS_TOKEN") + '&movie_id=' + this.props.movie_id)
         .then(res => {
           this.setState({
             rating: res.data.rating,
@@ -49,7 +48,7 @@ class StarRating extends React.Component {
         movieData["movieId"] = this.props.movie_id;
         movieData["movieName"] = this.props.movie_name;
         movieData["rating"] = nextValue;
-        axios.post('http://149.165.169.128:30004/usermovierating/save',  movieData )
+        axios.post('http://149.165.169.90:80/usermovierating/save',  movieData )
             .then(res => {
               Alert.success("Rating saved successfully");
             }).catch(error => {

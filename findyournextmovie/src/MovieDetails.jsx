@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
-import { Route, Switch } from "react-router-dom";
 import axios from 'axios';
-import AutoFitImage from 'react-image-autofit-frame';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -70,7 +63,7 @@ class MovieDetails extends Component {
     }
 
   componentWillMount() {
-    axios.get('http://149.165.169.128:30001/movie/details?movieId=' +  this.props.match.params.movie_id)
+    axios.get('http://149.165.169.90:80/movie/details?movieId=' +  this.props.match.params.movie_id)
         .then(res => {
           this.setState({
             movieDetails: res.data,
