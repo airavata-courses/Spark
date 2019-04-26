@@ -8,6 +8,7 @@ spec:
   selector:
     app: login
     version: "1.0"
+    color: blue
   ports:
       # Port accessible inside cluster
     - port: 8080
@@ -26,12 +27,13 @@ spec:
   selector:
     matchLabels:
       app: login
-  replicas: 5
+  replicas: 3
   template:
     metadata:
       labels:
         app: login
         version: "1.1"
+        color: blue
     spec:
       containers:
         - name: login

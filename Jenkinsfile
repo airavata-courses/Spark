@@ -42,8 +42,8 @@ pipeline {
 						git clone https://github.com/airavata-courses/Spark.git Spark_login
 						cd Spark_login/
 						git checkout develop-login_service
-						sudo kubectl delete deployment login
-						sudo kubectl apply -f loginDeployment.yml
+						
+						sudo kubectl apply -f loginBlueDeployment.yml
 					'
 				'''
 
