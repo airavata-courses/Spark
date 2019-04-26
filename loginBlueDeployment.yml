@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: login-blue
+  name: login
 spec:
   type: LoadBalancer
   selector:
@@ -22,7 +22,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: login
+  name: login-blue
 spec:
   selector:
     matchLabels:
