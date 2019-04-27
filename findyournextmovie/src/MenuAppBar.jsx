@@ -55,6 +55,7 @@ class MenuAppBar extends React.Component {
   }
 
   login() {
+    console.log('login called...');
     this.props.auth.login();
   }
 
@@ -64,11 +65,13 @@ class MenuAppBar extends React.Component {
     const open = Boolean(anchorEl);
 
     let logOption;
-    // if(localStorage.getItem('isAuthenticated') == "true"){
-    //   logOption = <Link to= {"/moviehome"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}} onClick = {this.logout.bind(this)}> Log Out </Link>
-    // }else{
-    //   logOption = <Link to= {"/login"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}}> Log In </Link>
-    // }
+    if(localStorage.getItem('isAuthenticated') == "true"){
+      logOption = <Link to= {"/moviehome"} style={{textDecoration: 'none', marginLeft: '2%', color: 'white', width: '5%'}} onClick = {this.logout.bind(this)}> Log Out </Link>
+    }else{
+      logOption = <a style={{ cursor: 'pointer' }}
+        onClick={this.login.bind(this)}
+      > login </a>
+    }
 
     return (
       <div className={classes.root}>
@@ -81,9 +84,7 @@ class MenuAppBar extends React.Component {
               </Typography>
             </Link>
                 <Typography variant="h10" color="white" style={{marginLeft: '2%', width: '5%'}}>
-                <a style={{ cursor: 'pointer' }}
-                  onClick={this.login.bind(this)}
-                > login </a>
+                  {logOption}
                 </Typography>
           </Toolbar>
         </AppBar>

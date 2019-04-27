@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import history from '../history';
 import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from './auth0-variables';
@@ -20,8 +19,6 @@ export default class Auth {
   });
 
   constructor() {
-    // super(props);
-    console.log('in constructor');
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
@@ -40,28 +37,31 @@ export default class Auth {
     console.log('in handleAuthentication');
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        console.log('in if');
         this.setSession(authResult);
-        console.log('session is set');
-
         let obj = { email: this.userEmail, password: ''};
         let loginRequest = Object.assign({}, obj);
-        // console.log('loginRequest :: '+ JSON.stringify(loginRequest));
 
-        axios.post('http://149.165.169.128:30003/api/login',  loginRequest )
-            .then(res => {
-              //localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
-              //localStorage.setItem('isAuthenticated', true);
+        axios.post('http://149.165.169.90:80/api/login',  loginRequest).then(res => {
+              localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
+              console.log('ACCESS_TOKEN :: ' + localStorage.getItem('ACCESS_TOKEN'));
+              localStorage.setItem('isAuthenticated', true);
+              console.log(' user id after login :: ' + res.data.user_id);
               Alert.success("Login successful auth.js");
-              this.props.history.push("/moviehome");
             }).catch(error => {
-              // localStorage.setItem('isAuthenticated', false);
-              Alert.error("Sorry! Some error occurred. auth.js");
+                  axios.post('http://149.165.169.90:80/api/register',  loginRequest)
+                    .then(res =>{
+                     Alert.success("Login successful auth.js");
+                     localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
+                     localStorage.setItem('isAuthenticated', true);
+                     console.log(' user id after signup :: ' + res.data.user_id);
+                  }).catch(error => {
+                    localStorage.setItem('isAuthenticated', false);
+                     Alert.error("Sorry! Some error occurred in signing in. auth.js");
+                  });
             });
       } else if (err) {
-        // history.replace('/login');
-        console.log('error found :: ' + JSON.stringify(err));
-        alert(`Error: ${err.error}. Check the console for further details.`);
+        history.replace('/moviehome');
+        // alert(`Error: ${err.error}. Check the console for further details.`);
       }
     });
   }
@@ -88,6 +88,7 @@ export default class Auth {
     this.expiresAt = expiresAt;
     this.userEmail = authResult.idTokenPayload.email;
     // navigate to the moviehome route
+    history.push("/moviehome");
     history.replace('/moviehome');
   }
 

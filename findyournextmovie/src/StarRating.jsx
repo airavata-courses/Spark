@@ -56,7 +56,7 @@ class StarRating extends React.Component {
               Alert.error("Sorry! Some error occurred.");
             });
       }else{
-        history.push('\login');
+        history.push('/login');
       }
   }
 

@@ -1,22 +1,17 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import SearchBar from 'material-ui-search-bar'
 import axios from 'axios';
-import {Tabs, Tab} from '@material-ui/core/'
 import { Link } from "react-router-dom";
-import MovieDetails from './MovieDetails';
 import NonEditableStarRating from './NonEditableStarRating';
 import Alert from "react-s-alert";
 
@@ -116,10 +111,11 @@ class MovieHome extends Component{
     });
   }
 
+  login() {
+    this.props.auth.login();
+  }
+
   getSuggestions(){
-    if (localStorage.getItem("isAuthenticated") === null) {
-      this.props.history.push('\login');
-    }else if(localStorage.getItem('isAuthenticated') == "true"){
       axios.get('http://149.165.169.90:80/suggestion?userId=' + localStorage.getItem('ACCESS_TOKEN') )
           .then(res => {
             this.setState({
@@ -127,12 +123,12 @@ class MovieHome extends Component{
             });        }).catch(error => {
               Alert.error("Sorry! Some error occurred.");
           });
-      }else{
-        this.props.history.push('\login')
       }
-  }
 
   render(){
+
+    const { isAuthenticated } = this.props.auth;
+
     const { classes } = this.props;
     return(
 
@@ -152,12 +148,28 @@ class MovieHome extends Component{
           style = {{marginTop: '2%', backgroundColor: '#DCDCDC', width: '15%'}}
            onClick={this.requestSearch}> Search
          </Button>
-         <Button
-           style = {{marginTop: '2%', backgroundColor: '#DCDCDC', marginLeft: '3%', width: '15%'}}
-           onClick = {this.getSuggestions.bind(this)}
-           >
-           Get Suggestions
-         </Button>
+         {
+              isAuthenticated() && (
+                <Button
+                  style = {{marginTop: '2%', backgroundColor: '#DCDCDC', marginLeft: '3%', width: '15%'}}
+                  onClick = {this.getSuggestions.bind(this)}
+                  >
+                   Get Suggestions
+                   </Button>
+                )
+          }
+
+          {
+              !isAuthenticated() && (
+                <Button
+                  style = {{marginTop: '2%', backgroundColor: '#DCDCDC', marginLeft: '3%', width: '15%'}}
+                  onClick = {this.login.bind(this)}
+                  >
+                  Get Suggestions
+                  </Button>
+                )
+          }
+
           <div className={classNames(classes.layout, classes.cardGrid)}>
             {/* End hero unit */}
             <Grid container spacing={40}>
@@ -169,7 +181,7 @@ class MovieHome extends Component{
                   component="img"
                     className={classes.media}
                     image= {"https://image.tmdb.org/t/p/w500/" + card['poster_path']} // eslint-disable-line max-len
-                    title="Image title"
+                    title={card["title"]}
                   />
                   <CardContent className={classes.cardContent} style={{marginTop:'5px'}}>
                       <Typography gutterBottom variant="h5" component="h2">
