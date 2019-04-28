@@ -55,7 +55,6 @@ class MenuAppBar extends React.Component {
   }
 
   login() {
-    console.log('login called...');
     this.props.auth.login();
   }
 
@@ -70,7 +69,7 @@ class MenuAppBar extends React.Component {
     }else{
       logOption = <a style={{ cursor: 'pointer' }}
         onClick={this.login.bind(this)}
-      > login </a>
+      > Log In </a>
     }
 
     return (

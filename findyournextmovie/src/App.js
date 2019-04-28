@@ -28,7 +28,7 @@ class App extends Component {
       <Router history={history}>
         <div className="App">
           <MenuAppBar auth={auth} ></MenuAppBar>
-          <Route exact path = "/" component={MovieHome}></Route>
+          <Route exact path = "/" render={(props) => <MovieHome auth={auth} {...props} />} />
           <Route path="/moviehome" render={(props) => <MovieHome auth={auth} {...props} />} />
             <Route path = "/movieDetails/:movie_id" component={MovieDetails}></Route>
             <Route path = "/login" component={LogIn}></Route>

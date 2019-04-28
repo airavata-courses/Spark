@@ -34,7 +34,6 @@ export default class Auth {
   }
 
   handleAuthentication() {
-    console.log('in handleAuthentication');
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
@@ -43,20 +42,17 @@ export default class Auth {
 
         axios.post('http://149.165.169.90:80/api/login',  loginRequest).then(res => {
               localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
-              console.log('ACCESS_TOKEN :: ' + localStorage.getItem('ACCESS_TOKEN'));
               localStorage.setItem('isAuthenticated', true);
-              console.log(' user id after login :: ' + res.data.user_id);
-              Alert.success("Login successful auth.js");
+              Alert.success("Login successful");
             }).catch(error => {
                   axios.post('http://149.165.169.90:80/api/register',  loginRequest)
                     .then(res =>{
                      Alert.success("Login successful auth.js");
                      localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
                      localStorage.setItem('isAuthenticated', true);
-                     console.log(' user id after signup :: ' + res.data.user_id);
                   }).catch(error => {
                     localStorage.setItem('isAuthenticated', false);
-                     Alert.error("Sorry! Some error occurred in signing in. auth.js");
+                     Alert.error("Sorry! Some error occurred in signing in.");
                   });
             });
       } else if (err) {
