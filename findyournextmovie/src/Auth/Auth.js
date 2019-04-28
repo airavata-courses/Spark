@@ -47,7 +47,7 @@ export default class Auth {
             }).catch(error => {
                   axios.post('http://149.165.169.90:80/api/register',  loginRequest)
                     .then(res =>{
-                     Alert.success("Login successful auth.js");
+                     Alert.success("Login successful.");
                      localStorage.setItem('ACCESS_TOKEN', res.data.user_id);
                      localStorage.setItem('isAuthenticated', true);
                   }).catch(error => {
